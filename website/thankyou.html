@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Process Transaction</title>
+    <title>Payment Successful</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #020617; color: white; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; }
@@ -12,31 +11,38 @@
 <body>
 
     <div class="text-center">
-        <div class="text-4xl mb-4">💸</div>
-        <h2 class="text-2xl font-bold text-white mb-2">Processing Transaction...</h2>
-        <p class="text-slate-400" id="debug-text">Awaiting data...</p>
+        <div class="text-4xl mb-4">✅</div>
+        <h2 class="text-2xl font-bold text-green-500 mb-2">Transaction Recorded</h2>
+        <p class="text-slate-300 mb-4">Thank you for your purchase on the NexusAI platform.</p>
+        
+        <div class="bg-slate-900 border border-slate-700 p-6 rounded-xl max-w-sm mx-auto mb-6 shadow-lg">
+            <p class="text-sm text-slate-400">New Transaction Amount</p>
+            <p id="display-price" class="text-2xl font-bold text-white">$0.00</p>
+            <hr class="border-slate-800 my-4">
+            <p class="text-sm text-indigo-400">Total Accumulated Revenue</p>
+            <p id="total-accumulated" class="text-xl font-mono text-green-400">$0.00</p>
+        </div>
+
+        <button onclick="location.href='index.html'" class="mt-8 bg-slate-800 hover:bg-slate-700 text-white px-6 py-2 rounded border border-slate-600">
+            Return to Website
+        </button>
 
         <script>
-            // 1. Get the money from the address bar
+            // 1. Get the new amount from the link
             const urlParams = new URLSearchParams(window.location.search);
-            const amount = urlParams.get('amount');
-            const display = document.getElementById('debug-text');
+            const amount = parseInt(urlParams.get('amount')) || 0;
 
-            // 2. Save it to the computer's memory
-            if (amount) {
-                localStorage.setItem('sessionRevenue', amount);
-                localStorage.setItem('lastTransactionTime', 'Just now');
-                
-                display.innerHTML = `Processing Amount: <strong>$${amount}</strong>`;
-                
-                // 3. Wait 2 seconds, then send user to Admin Dashboard
-                // This guarantees the info is saved before they move on
-                setTimeout(() => {
-                    window.location.href = "details.html";
-                }, 2000);
-            } else {
-                display.innerHTML = "Error: No amount found in URL."
-            }
+            // 2. Add it to the total in your browser's memory
+            let currentTotal = parseInt(localStorage.getItem('sessionRevenue')) || 0;
+            let newTotal = currentTotal + amount;
+
+            // 3. SAVE THE RESULTS
+            localStorage.setItem('sessionRevenue', newTotal);
+
+            // 4. UPDATE THE SCREEN
+            document.getElementById('display-price').innerText = '$' + amount;
+            document.getElementById('total-accumulated').innerText = '$' + newTotal;
+
         </script>
     </div>
 
