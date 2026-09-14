@@ -1,169 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusAI - Admin Console</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .hidden-system { display: none !important; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NexusAI – Admin Console</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+      .hidden { display: none !important; }
+  </style>
 </head>
-<body>
+<body class="bg-slate-950 text-slate-200 font-sans">
 
-    <!-- LOGIN PANEL -->
-    <div id="login-panel" class="min-h-screen flex items-center justify-center p-8 bg-slate-950">
-        <div class="bg-slate-900 border border-slate-800 p-10 rounded-2xl w-full max-w-sm shadow-2xl">
-            <div class="flex items-center justify-center mb-8">
-                <div class="bg-indigo-600 p-3 rounded-lg text-white">🔒</div>
-            </div>
-            <h1 class="text-2xl font-bold text-center mb-8 text-slate-200 tracking-wide">NEXUS ADMIN</h1>
-            <input type="text" id="username" placeholder="Admin ID" class="w-full bg-slate-800 border border-slate-700 rounded p-3 mb-4 text-white outline-none focus:border-indigo-500 transition">
-            <input type="password" id="password" placeholder="Secret Key" class="w-full bg-slate-800 border border-slate-700 rounded p-3 mb-6 text-white outline-none focus:border-indigo-500 transition">
-            <button id="login-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded font-bold text-white transition shadow-lg">ACCESS</button>
-        </div>
+  <!-- ---------- LOGIN PANEL ---------- -->
+  <section id="login-section" class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 p-10 rounded-2xl max-w-sm w-full shadow-2xl">
+      <h1 class="text-2xl font-bold text-center mb-6 text-indigo-400">NEXUS ADMIN</h1>
+
+      <input type="text" id="u" placeholder="Admin ID" class="w-full p-3 mb-4 bg-slate-800 border border-slate-700 rounded text-white focus:border-indigo-500" required>
+      <input type="password" id="p" placeholder="Secret Key" class="w-full p-3 mb-6 bg-slate-800 border border-slate-700 rounded text-white focus:border-indigo-500" required>
+
+      <button id="loginBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded font-bold transition">ACCESS</button>
+      <p id="loginError" class="text-xs text-red-500 mt-4 hidden text-center">Invalid ID / Secret</p>
     </div>
+  </section>
 
-    <!-- ADMIN DASHBOARD -->
-    <div id="admin-dashboard" class="hidden-system min-h-screen bg-slate-950 text-white">
-        
-        <!-- Top Bar -->
-        <div class="border-b border-slate-800 px-10 py-6">
-            <div class="flex justify-between items-center">
-                <div class="font-bold text-indigo-400 tracking-wider text-sm">NEXUS<span class="text-white">.AI</span></div>
-                <button id="logout-btn" class="text-xs text-slate-500 hover:text-white border border-slate-800 px-4 py-2 rounded">LOGOUT</button>
-            </div>
+  <!-- ---------- ADMIN DASHBOARD (Hidden At First) ---------- -->
+  <section id="admin-section" class="hidden min-h-screen p-10 bg-slate-950 text-slate-200">
+    <!-- Header -->
+    <header class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
+      <h2 class="text-3xl font-bold text-indigo-400">📊 Admin Console</h2>
+      <button id="logoutBtn" class="text-sm font-medium text-red-500 hover:text-red-400">LOGOUT</button>
+    </header>
+
+    <!-- Stats Card -->
+    <section class="bg-slate-900 border border-slate-800 p-8 rounded-xl mb-8">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-sm font-bold uppercase tracking-wide text-slate-400 mb-2">Running Total</h3>
+          <div id="rev" class="text-4xl font-bold text-white">$0.00</div>
+          <p id="revStatus" class="text-xs text-slate-500 mt-2">No transactions recorded.</p>
         </div>
-
-        <!-- Dashboard Content -->
-        <div class="px-10 py-10">
-            
-            <!-- Subtle Status Line (Hidden Ticker) -->
-            <div class="flex items-center gap-4 mb-8 text-xs text-slate-500 uppercase tracking-wider">
-                <span class="flex items-center gap-2">🔵 <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> System Operational</span>
-                <span class="border-l border-slate-800 px-4">Tracking Internal Requests Only</span>
-            </div>
-
-            <!-- Two Column Layout -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
-                <!-- LEFT: RECENT ACTIVITY (Clean List) -->
-                <div class="bg-slate-900 border border-slate-800 p-8 rounded-xl">
-                    <h2 class="text-sm font-bold text-slate-300 uppercase tracking-widest mb-6">Recent Incoming Leads</h2>
-                    <ul class="space-y-4 text-sm text-slate-400">
-                        <li class="flex justify-between items-center border-b border-slate-800 pb-3">
-                            <span>🏢 Mr. Smith (Enterprise)</span>
-                            <span class="text-xs text-indigo-400 bg-indigo-900/20 px-2 py-1 rounded">PENDING</span>
-                        </li>
-                        <li class="flex justify-between items-center border-b border-slate-800 pb-3">
-                            <span>🏡 Ms. Jones (Home)</span>
-                            <span class="text-xs text-green-500 bg-green-900/20 px-2 py-1 rounded">ACTIVE</span>
-                        </li>
-                        <li class="flex justify-between items-center pb-3">
-                            <span>⚙️ Tech Solutions Inc.</span>
-                            <span class="text-xs text-yellow-500 bg-yellow-900/20 px-2 py-1 rounded">AUDIT</span>
-                        </li>
-                    </ul>
-                    <div class="mt-8 p-4 bg-slate-950 rounded border border-slate-800/50">
-                        <p class="text-xs text-slate-500">📝 <strong>Transaction Data:</strong> Total tracked value updates dynamically upon user submission.</p>
-                    </div>
-                </div>
-
-                <!-- RIGHT: BUSINESS INFO (Text Only) -->
-                <div class="bg-slate-900 border border-slate-800 p-8 rounded-xl">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="text-2xl">📜</span>
-                        <h2 class="text-xl font-bold text-slate-200">Operational Requirements</h2>
-                    </div>
-                    <p class="text-slate-400 mb-4">
-                        Agency operations rely on cloud software (OpenAI, Make.com) and open-source IoT (Home Assistant).
-                    </p>
-                    <p class="text-slate-400 mb-4">
-                        Guaranteed safety compliance requires a licensed electrician. Primary stack also involves VPS (Hetzner) for private data.
-                    </p>
-                    <p class="text-slate-400">
-                        We also require business liability insurance and strict GDPR-compliant privacy policies to protect sensor data.
-                    </p>
-                </div>
-            </div>
+        <div class="text-right">
+          <div class="bg-green-500/10 text-green-500 px-3 py-1 rounded text-xs font-bold mb-1">ONLINE</div>
         </div>
-    </div>
+      </div>
+    </section>
 
-    <script>
-        // Wait for DOM to be fully loaded before attaching events
-        document.addEventListener('DOMContentLoaded', function() {
-            const loginPanel = document.getElementById('login-panel');
-            const adminDashboard = document.getElementById('admin-dashboard');
-            const loginBtn = document.getElementById('login-btn');
-            const logoutBtn = document.getElementById('logout-btn');
-            const usernameInput = document.getElementById('username');
-            const passwordInput = document.getElementById('password');
-            const revenueNumber = document.getElementById('revenue-number');
-            const statusText = document.getElementById('last-transaction');
+    <!-- Business Overview -->
+    <section class="bg-slate-900 border border-slate-800 p-8 rounded-xl">
+      <h3 class="text-xl font-bold mb-6 flex items-center gap-2"><span class="text-indigo-400">📜</span> Operational Requirements</h3>
+      <p class="text-sm text-slate-400 space-y-2 leading-relaxed">
+        • Cloud software (OpenAI, Make.com) & open‑source IoT (Home Assistant).<br>
+        • VPS (Hetzner/DigitalOcean).<br>
+        • Licensed electrician for high‑voltage wiring.<br>
+        • Liability insurance & GDPR‑compliant privacy policy.
+      </p>
+    </section>
 
-            // Login Handler
-            loginBtn.addEventListener('click', function() {
-                const u = usernameInput.value.trim();
-                const p = passwordInput.value.trim();
-                
-                console.log('Login attempt:', { username: u, passwordLength: p.length });
-                
-                if (u === 'admin' && p === 'admin123') {
-                    // Hide login, show admin
-                    loginPanel.classList.add('hidden-system');
-                    adminDashboard.classList.remove('hidden-system');
-                    updateRevenueDisplay();
-                    console.log('Login successful - showing admin dashboard');
-                } else {
-                    // Show error (you could add a UI error here if desired)
-                    console.log('Login failed - invalid credentials');
-                    alert('Invalid credentials. Please try again.');
-                }
-            });
+    <!-- Reset Button (Visible ONLY after login) -->
+    <footer class="mt-8 text-center">
+      <button id="resetBtn" class="text-xs text-slate-500 hover:text-red-500 underline transition">Reset Session Data</button>
+    </footer>
+  </section>
 
-            // Logout Handler
-            logoutBtn.addEventListener('click', function() {
-                // Reset form and show login panel
-                usernameInput.value = '';
-                passwordInput.value = '';
-                adminDashboard.classList.add('hidden-system');
-                loginPanel.classList.remove('hidden-system');
-                console.log('Logged out - showing login panel');
-            });
+  <script>
+    // Utility to read, write, and clear localStorage totals
+    const getTotal = () => parseInt(localStorage.getItem('sessionRevenue')) || 0;
+    const setTotal = (val) => localStorage.setItem('sessionRevenue', val);
+    const clearTotal = () => localStorage.removeItem('sessionRevenue');
 
-            // Update revenue display from localStorage
-            function updateRevenueDisplay() {
-                const total = localStorage.getItem('sessionRevenue');
-                if (total) {
-                    revenueNumber.innerText = '$' + total;
-                    revenueNumber.classList.remove('text-slate-500');
-                    revenueNumber.classList.add('text-green-400');
-                    statusText.innerText = `Last transaction: ${localStorage.getItem('lastTransactionTime') || 'Just now'}`;
-                    console.log('Revenue updated to:', total);
-                } else {
-                    revenueNumber.innerText = '$0.00';
-                    revenueNumber.classList.remove('text-green-400');
-                    revenueNumber.classList.add('text-slate-500');
-                    statusText.innerText = 'No transactions recorded yet.';
-                    console.log('No revenue data found - showing default');
-                }
-            }
+    // UI Update
+    const updateUI = () => {
+      const tot = getTotal();
+      const revEl = document.getElementById('rev');
+      const status = document.getElementById('revStatus');
+      if (tot > 0) {
+        revEl.textContent = `$${tot}`;
+        revEl.classList.remove('text-slate-500', 'text-white');
+        revEl.classList.add('text-green-400');
+        status.textContent = `Last transaction • ${new Date().toLocaleTimeString()}`;
+      } else {
+        revEl.textContent = `$0.00`;
+        revEl.classList.remove('text-green-400', 'text-slate-500');
+        revEl.classList.add('text-slate-500');
+        status.textContent = 'No transactions recorded.';
+      }
+    };
 
-            // Reset Data Handler
-            window.resetRevenueData = function() {
-                if (confirm('Are you sure you want to reset all transaction data?\nThis will clear the running total and cannot be undone.')) {
-                    localStorage.removeItem('sessionRevenue');
-                    localStorage.removeItem('lastTransactionTime');
-                    updateRevenueDisplay();
-                    alert('Session data has been reset to $0.00');
-                    console.log('Session data reset by user');
-                }
-            };
+    // Login handler
+    document.getElementById('loginBtn').addEventListener('click', () => {
+      const u = document.getElementById('u').value.trim();
+      const p = document.getElementById('p').value.trim();
+      if (u === 'admin' && p === 'admin123') {
+        document.getElementById('login-section').classList.add('hidden');
+        document.getElementById('admin-section').classList.remove('hidden');
+        updateUI();
+      } else {
+        document.getElementById('loginError').classList.remove('hidden');
+      }
+    });
 
-            // Initial check on load (in case someone lands directly on admin via URL)
-            updateRevenueDisplay();
-        });
-    </script>
+    // Logout handler
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      document.getElementById('admin-section').classList.add('hidden');
+      document.getElementById('login-section').classList.remove('hidden');
+    });
 
+    // Reset button
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      if (confirm('Reset ALL transaction data? This cannot be undone.')) {
+        clearTotal();
+        updateUI();
+        alert('Session data cleared to $0.00.');
+      }
+    });
+
+    // Run once on load – in case user lands directly on admin
+    updateUI();
+  </script>
 </body>
 </html>
