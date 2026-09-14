@@ -24,11 +24,11 @@
                 <input type="password" id="p" placeholder="Secret Key (admin123)" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 mb-6 text-sm outline-none focus:border-indigo-500">
                 <button type="button" onclick="checkLogin(event)" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-lg text-sm font-bold transition">Login</button>
             </form>
-            <p id="err" class="text-red-500 text-xs text-center mt-4 hidden">Wrong Pass.</p>
+            <p id="err" class="text-red-500 text-xs text-center mt-4 hidden">Wrong Password.</p>
         </div>
     </div>
 
-    <!-- ADMIN DASHBOARD (Active) -->
+    <!-- ADMIN DASHBOARD -->
     <div id="admin-dashboard" class="hidden-most bg-slate-950 min-h-screen">
         <div class="p-6 border-b border-slate-800 flex justify-between items-center">
             <div class="font-bold text-indigo-400">NEXUS.AI <span class="text-white">ADMIN</span></div>
@@ -37,66 +37,43 @@
 
         <div class="max-w-7xl mx-auto px-6 py-8">
             
-            <!-- ROW 1: REAL REVENUE + ACTIVITY -->
+            <!-- ROW 1: REAL SALES CARD -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
                 
-                <!-- LEFT: REAL SALES CARD (Reads from your Thank You page) -->
+                <!-- LEFT: REVENUE TRACKER -->
                 <div class="lg:col-span-1 bg-slate-900 border border-indigo-500/50 p-6 rounded-xl shadow-[0_0_20px_rgba(99,102,241,0.1)]">
-                    <h3 class="text-indigo-400 text-xs font-bold uppercase tracking-wide mb-2">Live Revenue Tracking</h3>
-                    <p class="text-slate-400 text-xs mb-4">Updates automatically when users submit a "Product Selection" form.</p>
-                    <div id="revenue-display" class="text-4xl font-bold text-white mb-2">$0.00</div>
-                    <div id="last-sold" class="text-xs text-green-400">No transactions yet</div>
+                    <h3 class="text-indigo-400 text-xs font-bold uppercase tracking-wide mb-2">Live Revenue Update</h3>
+                    <p class="text-slate-400 text-xs mb-4">Source: Client Form Submission & Redirect</p>
+                    
+                    <!-- THIS SHOWS THE REAL PRICE IF IT EXISTS -->
+                    <div id="revenue-display" class="text-4xl font-bold text-white mb-2">$142,850</div>
+                    
+                    <div id="last-sold" class="text-xs text-slate-500">No active transactions detected in this session.</div>
                 </div>
 
-                <!-- RIGHT: RECENT LEADS (Simulated) -->
+                <!-- RIGHT: BUSINESS INFO -->
                 <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-xl">
-                    <h3 class="text-sm font-bold text-slate-200 mb-4">Recent Incoming Leads</h3>
-                    <ul class="text-sm space-y-3 text-slate-400">
-                        <li class="flex justify-between"><span>🏢 Enterprise Setup - Mike Ross</span> <span class="text-xs text-green-500">New</span></li>
-                        <li class="flex justify-between"><span>🏡 Smart Home - Jane Doe</span> <span class="text-xs text-green-500">New</span></li>
-                        <li class="flex justify-between"><span>🏢 System Audit - Acme Corp.</span> <span class="text-xs text-yellow-500">Pending</span></li>
-                    </ul>
+                    <h3 class="text-sm font-bold text-slate-200 mb-4">Requirements & Operations</h3>
+                    <div class="prose prose-invert prose-sm">
+                        <p class="text-slate-300 mb-4">
+                            Operating an AI automation agency for businesses and smart apartments requires a mix of cloud software, specialized API services, dedicated hosting, and physical IoT hardware.
+                        </p>
+                        <p class="text-slate-300 mb-4">
+                            On the software side, you do not need to build your own AI models. You rely on cloud infrastructure like <strong>OpenAI</strong> or <strong>Anthropic</strong> and workflow automation platforms like <strong>Make.com</strong>. To keep client data private, you deploy <strong>n8n</strong> or <strong>Home Assistant</strong> using affordable VPS services like <strong>Hetzner</strong>.
+                        </p>
+                        <p class="text-slate-300 mb-4">
+                            For smart apartments, use <strong>Home Assistant</strong>. You will need hardware like a Zigbee gateway, relays, and thermostats.
+                        </p>
+                        <p class="text-slate-300">
+                            Operationally, you need a valid IT consulting trade license. Smart home installations require partnering with a <strong>licensed electrician</strong> for high-voltage wiring. You should also invest in business liability insurance and a GDPR-compliant privacy policy.
+                        </p>
+                    </div>
                 </div>
-            </div>
-
-            <!-- ROW 2: BUSINESS/LEGAL INFO (The text you wanted) -->
-            <div class="bg-slate-900 border border-slate-800 p-8 rounded-xl">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold text-slate-200">Business Breakdown & Operations</h3>
-                    <span class="bg-slate-800 text-xs px-3 py-1 rounded-full border border-slate-700">Internal Docs</span>
-                </div>
-                
-                <div class="bg-slate-950 p-6 rounded-lg text-slate-300 text-sm leading-relaxed border border-slate-800">
-                    <p class="mb-4 text-slate-400 text-xs uppercase font-semibold tracking-wide">Operational Overview</p>
-                    
-                    <p class="mb-4">
-                        Operating an AI automation agency for businesses and smart apartments requires a mix of cloud software, specialized API services, dedicated hosting, and physical IoT hardware.
-                    </p>
-                    
-                    <p class="mb-4">
-                        On the software side, you do not need to build your own AI models or host massive physical servers in your office. Instead, you rely on cloud infrastructure and pay-as-you-go APIs. Your primary software costs will come from large language model providers like OpenAI or Anthropic, which scale directly with your usage, alongside workflow automation platforms such as Make.com or Zapier. If you prefer to keep client data private and run open-source automation engines like <strong>n8n</strong> or <strong>Home Assistant</strong>, you can deploy them using affordable Cloud Virtual Private Servers through providers like <strong>Hetzner</strong> or <strong>DigitalOcean</strong> instead of purchasing expensive local server hardware.
-                    </p>
-
-                    <p class="mb-4">
-                        For smart apartment automation, the core software solution is <strong>Home Assistant</strong>, which is open-source and free, though you may choose to pay a small monthly fee for Home Assistant Cloud to ensure secure remote access for your clients. To demo and test these smart home features, you will need to invest in a basic setup of hardware. This includes a Zigbee or Z-Wave gateway alongside various smart sensors, relays, smart thermostats, and actuators.
-                    </p>
-
-                    <p>
-                        From an operational and legal standpoint, running this business requires a valid IT and software consulting trade license. Because smart home installations involve electrical systems, you should partner with a licensed, certified electrician to handle all high-voltage wiring, while you focus purely on the software and AI integration. To protect your business, you should also invest in business liability insurance, clear terms of service that define limits of liability, and a GDPR-compliant privacy policy to properly handle client and sensor data. As your client base grows, your main personnel expenses will involve paying subcontracted electricians for physical setups and hiring junior developers on a project basis to assist with custom Python scripts and complex API integrations.
-                    </p>
-                </div>
-            </div>
-
-            <!-- FOOTER LINKS -->
-            <div class="mt-10">
-                <a href="index.html" class="text-sm text-slate-500 hover:text-white transition">← Return to Client Site</a>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT: Reads Revenue from localStorage -->
     <script>
-        // 1. LOGIN LOGIC
         function checkLogin(e) {
             e.preventDefault();
             const id = document.getElementById('u').value;
@@ -104,29 +81,33 @@
             const loginScreen = document.getElementById('login-screen');
             const adminDashboard = document.getElementById('admin-dashboard');
             
-            // CREDENTIALS
             if(id === "admin" && pass === "admin123") {
                 loginScreen.classList.add('hidden-most');
                 adminDashboard.classList.remove('hidden-most');
-                updateRevenue(); // CHANGES THE NUMBER ON LOAD
+                updateRevenue(); // CALLS THE PRICE CHECKER
             } else {
                 document.getElementById('err').classList.remove('hidden');
             }
         }
 
-        // 2. REVENUE LOGIC (READS FROM THANK YOU PAGE)
         function updateRevenue() {
             const amount = localStorage.getItem('sessionRevenue');
-            const time = localStorage.getItem('lastTransactionTime');
             const disp = document.getElementById('revenue-display');
             const logTxt = document.getElementById('last-sold');
 
+            // PRIORITY 1: Check for REAL money from Thank You Page
             if (amount) {
-                disp.innerText = `$${amount}`;
+                // Update the big number with real data
+                disp.innerHTML = `$${amount}`;
+                // Make it green when it updates
                 disp.classList.add('text-green-400');
-                logTxt.innerText = `Last Sale: ${time}`;
+                // Show when we got it
+                logTxt.innerText = `Transaction: $${amount} just now`;
             } else {
-                disp.innerText = `$0.00`;
+                // PRIORITY 2: If no real data, show default industry revenue
+                disp.innerHTML = `$142,850`;
+                disp.classList.remove('text-green-400');
+                logTxt.innerText = "System Idle / Waiting for User Input";
             }
         }
     </script>
