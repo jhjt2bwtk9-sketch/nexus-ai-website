@@ -19,8 +19,8 @@
             </div>
             <h1 class="text-2xl font-bold text-center mb-8 text-slate-200 tracking-wide">NEXUS ADMIN</h1>
             <input type="text" id="username" placeholder="Admin ID" class="w-full bg-slate-800 border border-slate-700 rounded p-3 mb-4 text-white outline-none focus:border-indigo-500 transition">
-            <input type="password" id="password" placeholder="Secret Key" class="w-full bg-slate-800 border border-slate-700 rounded p-3 mb-8 text-white outline-none focus:border-indigo-500 transition">
-            <button onclick="enterSystem()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded font-bold text-white transition shadow-lg">ACCESS</button>
+            <input type="password" id="password" placeholder="Secret Key" class="w-full bg-slate-800 border border-slate-700 rounded p-3 mb-6 text-white outline-none focus:border-indigo-500 transition">
+            <button id="login-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded font-bold text-white transition shadow-lg">ACCESS</button>
         </div>
     </div>
 
@@ -31,7 +31,7 @@
         <div class="border-b border-slate-800 px-10 py-6">
             <div class="flex justify-between items-center">
                 <div class="font-bold text-indigo-400 tracking-wider text-sm">NEXUS<span class="text-white">.AI</span></div>
-                <button onclick="location.reload()" class="text-xs text-slate-500 hover:text-white border border-slate-800 px-4 py-2 rounded">LOGOUT</button>
+                <button id="logout-btn" class="text-xs text-slate-500 hover:text-white border border-slate-800 px-4 py-2 rounded">LOGOUT</button>
             </div>
         </div>
 
@@ -86,54 +86,83 @@
                     </p>
                 </div>
             </div>
-            
-            <!-- RESET BUTTON (ADMIN ONLY - APPEARS AFTER LOGIN) -->
-            <div class="mt-8 text-center">
-                <button onclick="resetRevenueData()" 
-                        class="text-xs text-slate-500 hover:text-red-500 underline transition">
-                    Reset Session Data
-                </button>
-            </div>
         </div>
     </div>
 
     <script>
-        function enterSystem() {
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
-            if (u === 'admin' && p === 'admin123') {
-                document.getElementById('login-panel').classList.add('hidden-system');
-                document.getElementById('admin-dashboard').classList.remove('hidden-system');
-                updateRevenueDisplay();
-            }
-        }
+        // Wait for DOM to be fully loaded before attaching events
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginPanel = document.getElementById('login-panel');
+            const adminDashboard = document.getElementById('admin-dashboard');
+            const loginBtn = document.getElementById('login-btn');
+            const logoutBtn = document.getElementById('logout-btn');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const revenueNumber = document.getElementById('revenue-number');
+            const statusText = document.getElementById('last-transaction');
 
-        function updateRevenueDisplay() {
-            const total = localStorage.getItem('sessionRevenue');
-            const revNum = document.getElementById('revenue-number');
-            const status = document.getElementById('last-transaction');
-            
-            if (total) {
-                revNum.innerText = '$' + total;
-                revNum.classList.remove('text-slate-500');
-                revNum.classList.add('text-green-400');
-                status.innerText = `Last transaction: ${localStorage.getItem('lastTransactionTime') || 'Just now'}`;
-            } else {
-                revNum.innerText = '$0.00';
-                revNum.classList.remove('text-green-400');
-                revNum.classList.add('text-slate-500');
-                status.innerText = 'No transactions recorded yet.';
-            }
-        }
+            // Login Handler
+            loginBtn.addEventListener('click', function() {
+                const u = usernameInput.value.trim();
+                const p = passwordInput.value.trim();
+                
+                console.log('Login attempt:', { username: u, passwordLength: p.length });
+                
+                if (u === 'admin' && p === 'admin123') {
+                    // Hide login, show admin
+                    loginPanel.classList.add('hidden-system');
+                    adminDashboard.classList.remove('hidden-system');
+                    updateRevenueDisplay();
+                    console.log('Login successful - showing admin dashboard');
+                } else {
+                    // Show error (you could add a UI error here if desired)
+                    console.log('Login failed - invalid credentials');
+                    alert('Invalid credentials. Please try again.');
+                }
+            });
 
-        function resetRevenueData() {
-            if (confirm('Are you sure you want to reset all transaction data?\nThis will clear the running total and cannot be undone.')) {
-                localStorage.removeItem('sessionRevenue');
-                localStorage.removeItem('lastTransactionTime');
-                updateRevenueDisplay();
-                alert('Session data has been reset to $0.00');
+            // Logout Handler
+            logoutBtn.addEventListener('click', function() {
+                // Reset form and show login panel
+                usernameInput.value = '';
+                passwordInput.value = '';
+                adminDashboard.classList.add('hidden-system');
+                loginPanel.classList.remove('hidden-system');
+                console.log('Logged out - showing login panel');
+            });
+
+            // Update revenue display from localStorage
+            function updateRevenueDisplay() {
+                const total = localStorage.getItem('sessionRevenue');
+                if (total) {
+                    revenueNumber.innerText = '$' + total;
+                    revenueNumber.classList.remove('text-slate-500');
+                    revenueNumber.classList.add('text-green-400');
+                    statusText.innerText = `Last transaction: ${localStorage.getItem('lastTransactionTime') || 'Just now'}`;
+                    console.log('Revenue updated to:', total);
+                } else {
+                    revenueNumber.innerText = '$0.00';
+                    revenueNumber.classList.remove('text-green-400');
+                    revenueNumber.classList.add('text-slate-500');
+                    statusText.innerText = 'No transactions recorded yet.';
+                    console.log('No revenue data found - showing default');
+                }
             }
-        }
+
+            // Reset Data Handler
+            window.resetRevenueData = function() {
+                if (confirm('Are you sure you want to reset all transaction data?\nThis will clear the running total and cannot be undone.')) {
+                    localStorage.removeItem('sessionRevenue');
+                    localStorage.removeItem('lastTransactionTime');
+                    updateRevenueDisplay();
+                    alert('Session data has been reset to $0.00');
+                    console.log('Session data reset by user');
+                }
+            };
+
+            // Initial check on load (in case someone lands directly on admin via URL)
+            updateRevenueDisplay();
+        });
     </script>
 
 </body>
