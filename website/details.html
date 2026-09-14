@@ -7,107 +7,151 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .hidden-most { display: none !important; }
+        /* Styling the inputs to look nice and blank */
+        .admin-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #334155;
+            padding: 0;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 1rem;
+            width: 100%;
+        }
+        .backdrop-fil {
+            background-color: #0f172a;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans antialiased">
 
-    <!-- LOGIN SCREEN -->
-    <div id="login-screen" class="min-h-screen flex items-center justify-center px-4">
-        <div class="bg-slate-900 border border-slate-800 p-8 rounded-2xl w-full max-w-md shadow-xl">
-            <div class="text-center mb-8">
-                <div class="text-4xl mb-4">🔒</div>
-                <h1 class="text-xl font-bold text-slate-200">Restricted Access</h1>
+    <!-- LOGIN SCREEN (Clean Look) -->
+    <div id="login-screen" class="backdrop-fil w-full">
+        <div class="bg-slate-900 border border-slate-800 p-10 rounded-2xl w-full max-w-md shadow-xl">
+            <div class="text-center mb-10">
+                <div class="text-6xl mb-4">🔒</div>
+                <h1 class="text-xl font-bold text-white tracking-wide">RESTRICTED ACCESS</h1>
             </div>
             
-            <form id="login-form">
-                <input type="text" id="u" placeholder="ID (admin)" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 mb-4 text-sm outline-none focus:border-indigo-500">
-                <input type="password" id="p" placeholder="Secret Key (admin123)" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 mb-6 text-sm outline-none focus:border-indigo-500">
-                <button type="button" onclick="checkLogin(event)" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-lg text-sm font-bold transition">Login</button>
+            <!-- CLEAN FORM -->
+            <div>
+                <label class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2 block">Identity</label>
+                <input type="text" id="u" class="admin-input focus:border-indigo-500 transition-colors outline-none border-b-2 border-slate-700 focus:border-indigo-500 pb-2">
+                
+                <label class="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2 block">Secret Key</label>
+                <input type="password" id="p" class="admin-input focus:border-indigo-500 transition-colors outline-none border-b-2 border-slate-700 focus:border-indigo-500 pb-2">
+                
+                <!-- DEMO RESET BUTTON -->
+                <p class="text-center mt-6">
+                    <a href="#" onclick="resetData()" class="text-xs text-slate-500 hover:text-white underline">Reset Demo Data</a>
+                </p>
+
+                <button type="button" onclick="checkLogin(event)" class="block w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded-lg text-white font-bold mt-8 transition shadow-lg shadow-indigo-900/50">ACCESS SYSTEM</button>
             </form>
-            <p id="err" class="text-red-500 text-xs text-center mt-4 hidden">Wrong Password.</p>
+            <p id="err" class="text-red-500 text-xs text-center mt-6 hidden font-bold">ACCESS DENIED: Wrong Key.</p>
         </div>
     </div>
 
-    <!-- ADMIN DASHBOARD -->
-    <div id="admin-dashboard" class="hidden-most bg-slate-950 min-h-screen">
-        <div class="p-6 border-b border-slate-800 flex justify-between items-center">
-            <div class="font-bold text-indigo-400">NEXUS.AI <span class="text-white">ADMIN</span></div>
-            <button onclick="location.reload()" class="bg-red-900/50 text-red-400 border border-red-900 text-xs px-3 py-1 rounded">Log Out</button>
+    <!-- ADMIN DASHBOARD (Active) -->
+    <div id="admin-dashboard" class="hidden-most bg-slate-950 min-h-screen text-white">
+        <!-- Header -->
+        <div class="border-b border-slate-800 p-6 flex justify-between items-center">
+            <div class="text-2xl font-bold tracking-tighter text-indigo-400">NEXUS<span class="text-white">.AI</span></div>
+            <button onclick="location.reload()" class="text-xs text-red-400 border border-red-900 bg-red-900/20 px-4 py-2 rounded hover:bg-red-900">LOG OUT</button>
         </div>
 
-        <div class="max-w-7xl mx-auto px-6 py-8">
+        <div class="p-8 max-w-6xl mx-auto">
             
-            <!-- ROW 1: REAL SALES CARD -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+            <!-- REAL REVENUE TRACKER -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
                 
-                <!-- LEFT: REVENUE TRACKER -->
-                <div class="lg:col-span-1 bg-slate-900 border border-indigo-500/50 p-6 rounded-xl shadow-[0_0_20px_rgba(99,102,241,0.1)]">
-                    <h3 class="text-indigo-400 text-xs font-bold uppercase tracking-wide mb-2">Live Revenue Update</h3>
-                    <p class="text-slate-400 text-xs mb-4">Source: Client Form Submission & Redirect</p>
-                    
-                    <!-- THIS SHOWS THE REAL PRICE IF IT EXISTS -->
-                    <div id="revenue-display" class="text-4xl font-bold text-white mb-2">$142,850</div>
-                    
-                    <div id="last-sold" class="text-xs text-slate-500">No active transactions detected in this session.</div>
+                <!-- TOTAL SALES CARD -->
+                <div class="bg-slate-900 border-l-4 border-indigo-500 p-6 rounded-r-xl">
+                    <h2 class="text-sm text-indigo-400 font-bold uppercase tracking-widest mb-2">Total Projected Revenue</h2>
+                    <div class="mt-4">
+                        <span id="revenue-display" class="text-5xl font-bold text-white tracking-tight">$142,850</span>
+                    </div>
+                    <p id="transaction-info" class="text-xs text-slate-400 mt-4 leading-relaxed">
+                        Waiting for user submissions. Please submit a request on the client site to generate live data.
+                    </p>
                 </div>
 
-                <!-- RIGHT: BUSINESS INFO -->
-                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-6 rounded-xl">
-                    <h3 class="text-sm font-bold text-slate-200 mb-4">Requirements & Operations</h3>
-                    <div class="prose prose-invert prose-sm">
+                <!-- BUSINESS INFO CARD -->
+                <div class="lg:col-span-2 bg-slate-900 border border-slate-800 p-8 rounded-xl">
+                    <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                        <span class="text-yellow-400">ℹ️</span> Operational Requirements
+                    </h3>
+                    
+                    <div class=" prose prose-invert prose-sm max-w-none">
+                        <p class="text-slate-400 text-xs uppercase font-bold tracking-wide mb-2">Software Stack</p>
                         <p class="text-slate-300 mb-4">
-                            Operating an AI automation agency for businesses and smart apartments requires a mix of cloud software, specialized API services, dedicated hosting, and physical IoT hardware.
+                            We emphasize cloud infrastructure (OpenAI, Anthropic) and automation platforms (Make.com, Zapier) to minimize server costs.
                         </p>
+                        
+                        <p class="text-slate-400 text-xs uppercase font-bold tracking-wide mb-2">Hardware & IoT</p>
                         <p class="text-slate-300 mb-4">
-                            On the software side, you do not need to build your own AI models. You rely on cloud infrastructure like <strong>OpenAI</strong> or <strong>Anthropic</strong> and workflow automation platforms like <strong>Make.com</strong>. To keep client data private, you deploy <strong>n8n</strong> or <strong>Home Assistant</strong> using affordable VPS services like <strong>Hetzner</strong>.
+                            Smart home capabilities utilize <strong>Home Assistant</strong>. Hardware requirements include Zigbee gateways, sensors, and relays.
                         </p>
-                        <p class="text-slate-300 mb-4">
-                            For smart apartments, use <strong>Home Assistant</strong>. You will need hardware like a Zigbee gateway, relays, and thermostats.
-                        </p>
+
+                        <p class="text-slate-400 text-xs uppercase font-bold tracking-wide mb-2">Legal & Compliance</p>
                         <p class="text-slate-300">
-                            Operationally, you need a valid IT consulting trade license. Smart home installations require partnering with a <strong>licensed electrician</strong> for high-voltage wiring. You should also invest in business liability insurance and a GDPR-compliant privacy policy.
+                            Business requires a trade license and liability insurance. Smart home installation must be performed by licensed electricians for safe, code-compliant wiring.
                         </p>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 
     <script>
+        // 1. LOGIN LOGIC
         function checkLogin(e) {
             e.preventDefault();
             const id = document.getElementById('u').value;
             const pass = document.getElementById('p').value;
             const loginScreen = document.getElementById('login-screen');
             const adminDashboard = document.getElementById('admin-dashboard');
+            const err = document.getElementById('err');
             
             if(id === "admin" && pass === "admin123") {
                 loginScreen.classList.add('hidden-most');
                 adminDashboard.classList.remove('hidden-most');
-                updateRevenue(); // CALLS THE PRICE CHECKER
+                updateRevenue();
             } else {
-                document.getElementById('err').classList.remove('hidden');
+                err.classList.remove('hidden');
             }
         }
 
+        // 2. DATA RESET (For testing)
+        function resetData() {
+            localStorage.setItem('sessionRevenue', '0');
+            alert('Demo data cleared. Reload to reset to $142,850.');
+        }
+
+        // 3. REVENUE LOGIC
         function updateRevenue() {
             const amount = localStorage.getItem('sessionRevenue');
             const disp = document.getElementById('revenue-display');
-            const logTxt = document.getElementById('last-sold');
+            const info = document.getElementById('transaction-info');
 
-            // PRIORITY 1: Check for REAL money from Thank You Page
+            // Check memory
             if (amount) {
-                // Update the big number with real data
+                // If we have a real price, show it
                 disp.innerHTML = `$${amount}`;
-                // Make it green when it updates
-                disp.classList.add('text-green-400');
-                // Show when we got it
-                logTxt.innerText = `Transaction: $${amount} just now`;
+                disp.classList.remove('text-indigo-400');
+                disp.classList.add('text-green-400'); // Make it green
+                info.innerHTML = `Live Data: The value above was updated from a recent client request.`;
             } else {
-                // PRIORITY 2: If no real data, show default industry revenue
+                // If no data, show default
                 disp.innerHTML = `$142,850`;
+                disp.classList.add('text-indigo-400');
                 disp.classList.remove('text-green-400');
-                logTxt.innerText = "System Idle / Waiting for User Input";
+                info.innerHTML = `System Idle: The simulation is running on default database values.`;
             }
         }
     </script>
