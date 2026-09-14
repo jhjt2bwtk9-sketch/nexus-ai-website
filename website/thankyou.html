@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Payment Successful</title>
+    <title>Order Confirmed</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #020617; color: white; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; }
@@ -11,38 +11,41 @@
 <body>
 
     <div class="text-center">
-        <div class="text-4xl mb-4">✅</div>
-        <h2 class="text-2xl font-bold text-green-500 mb-2">Transaction Recorded</h2>
-        <p class="text-slate-300 mb-4">Thank you for your purchase on the NexusAI platform.</p>
+        <div class="text-6xl mb-4 text-green-500">✅</div>
+        <h2 class="text-3xl font-bold text-slate-200 mb-2">Order Confirmed</h2>
+        <p class="text-slate-400 mb-8">Your request for <span id="selection-text" class="text-indigo-400 font-semibold">Smart Setup</span> has been queued.</p>
         
-        <div class="bg-slate-900 border border-slate-700 p-6 rounded-xl max-w-sm mx-auto mb-6 shadow-lg">
-            <p class="text-sm text-slate-400">New Transaction Amount</p>
-            <p id="display-price" class="text-2xl font-bold text-white">$0.00</p>
-            <hr class="border-slate-800 my-4">
-            <p class="text-sm text-indigo-400">Total Accumulated Revenue</p>
-            <p id="total-accumulated" class="text-xl font-mono text-green-400">$0.00</p>
+        <div class="bg-slate-900 border border-slate-700 p-8 rounded-xl max-w-sm mx-auto mb-10">
+            <p class="text-sm text-slate-400 uppercase tracking-widest">Invoice ID: #NEX-9921</p>
+            <hr class="border-slate-800 my-6">
+            <p class="text-2xl font-bold text-white" id="display-price">$0.00</p>
+            <p class="text-xs text-slate-500 mt-2">Transaction Authorized</p>
         </div>
 
-        <button onclick="location.href='index.html'" class="mt-8 bg-slate-800 hover:bg-slate-700 text-white px-6 py-2 rounded border border-slate-600">
-            Return to Website
+        <p class="text-slate-500 text-sm animate-pulse">Redirecting...</p>
+
+        <button onclick="location.href='index.html'" class="mt-4 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3 rounded-lg font-bold transition">
+            Return to Wallet
         </button>
 
         <script>
-            // 1. Get the new amount from the link
+            // 1. Get the amount from the URL (e.g., vui=2500)
             const urlParams = new URLSearchParams(window.location.search);
             const amount = parseInt(urlParams.get('amount')) || 0;
+            
+            if (amount > 0) {
+                // 2. ADD IT UP (Silently in the background - User cannot see this)
+                let currentTotal = parseInt(localStorage.getItem('sessionRevenue')) || 0;
+                let newTotal = currentTotal + amount;
+                localStorage.setItem('sessionRevenue', newTotal);
 
-            // 2. Add it to the total in your browser's memory
-            let currentTotal = parseInt(localStorage.getItem('sessionRevenue')) || 0;
-            let newTotal = currentTotal + amount;
-
-            // 3. SAVE THE RESULTS
-            localStorage.setItem('sessionRevenue', newTotal);
-
-            // 4. UPDATE THE SCREEN
-            document.getElementById('display-price').innerText = '$' + amount;
-            document.getElementById('total-accumulated').innerText = '$' + newTotal;
-
+                // 3. SHOW ONLY THE PRICE OF THE CURRENT ORDER
+                document.getElementById('display-price').innerText = '$' + amount;
+                document.getElementById('selection-text').innerText = 'Smart Setup ($' + amount + ')';
+                
+                // Wait, then give back control
+                setTimeout(() => { /* User returns to site */ }, 2000);
+            }
         </script>
     </div>
 
