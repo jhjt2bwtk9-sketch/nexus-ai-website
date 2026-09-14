@@ -5,7 +5,7 @@
     <title>Order Confirmed</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #020617; color: white; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        body { background-color: #020617; color: white; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
     </style>
 </head>
 <body>
@@ -13,7 +13,7 @@
     <div class="text-center">
         <div class="text-6xl mb-4 text-green-500">✅</div>
         <h2 class="text-3xl font-bold text-slate-200 mb-2">Order Confirmed</h2>
-        <p class="text-slate-400 mb-8">Your request for <span id="selection-text" class="text-indigo-400 font-semibold">Smart Setup</span> has been queued.</p>
+        <p class="text-slate-400 mb-8">Your request has been queued.</p>
         
         <div class="bg-slate-900 border border-slate-700 p-8 rounded-xl max-w-sm mx-auto mb-10">
             <p class="text-sm text-slate-400 uppercase tracking-widest">Invoice ID: #NEX-9921</p>
@@ -22,30 +22,24 @@
             <p class="text-xs text-slate-500 mt-2">Transaction Authorized</p>
         </div>
 
-        <p class="text-slate-500 text-sm animate-pulse">Redirecting...</p>
-
-        <button onclick="location.href='index.html'" class="mt-4 bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3 rounded-lg font-bold transition">
-            Return to Wallet
+        <button onclick="location.href='index.html'" class="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3 rounded-lg font-bold transition">
+            Return to Website
         </button>
 
         <script>
-            // 1. Get the amount from the URL (e.g., vui=2500)
+            // 1. Get new money from URL
             const urlParams = new URLSearchParams(window.location.search);
             const amount = parseInt(urlParams.get('amount')) || 0;
-            
-            if (amount > 0) {
-                // 2. ADD IT UP (Silently in the background - User cannot see this)
-                let currentTotal = parseInt(localStorage.getItem('sessionRevenue')) || 0;
-                let newTotal = currentTotal + amount;
-                localStorage.setItem('sessionRevenue', newTotal);
 
-                // 3. SHOW ONLY THE PRICE OF THE CURRENT ORDER
-                document.getElementById('display-price').innerText = '$' + amount;
-                document.getElementById('selection-text').innerText = 'Smart Setup ($' + amount + ')';
-                
-                // Wait, then give back control
-                setTimeout(() => { /* User returns to site */ }, 2000);
-            }
+            // 2. READ OLD TOTAL + ADD NEW MONEY
+            let currentTotal = parseInt(localStorage.getItem('sessionRevenue')) || 0;
+            let newTotal = currentTotal + amount;
+
+            // 3. SAVE NEW TOTAL
+            localStorage.setItem('sessionRevenue', newTotal);
+
+            // 4. SHOW ONLY THE CURRENT ORDER PRICE ON RECEIPT
+            document.getElementById('display-price').innerText = '$' + amount;
         </script>
     </div>
 
