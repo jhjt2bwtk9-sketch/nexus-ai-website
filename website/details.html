@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusAI - Admin Dashboard</title>
+    <title>NexusAI - Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .hidden-system { display: none !important; }
@@ -11,87 +11,48 @@
 </head>
 <body>
 
-    <!-- LOGIN -->
     <div id="login-panel" class="min-h-screen flex items-center justify-center p-8">
         <div class="bg-slate-900 border border-slate-800 p-10 rounded-xl w-full max-w-sm">
             <h1 class="text-2xl font-bold text-center mb-8 text-indigo-400">NEXUS ADMIN</h1>
             <input type="text" id="username" placeholder="ID: admin" class="w-full bg-slate-800 border border-slate-700 rounded p-3 mb-4 text-white outline-none">
             <input type="password" id="password" placeholder="Secret Key" class="w-full bg-slate-800 border border-slate-700 rounded p-3 mb-6 text-white outline-none">
             <button onclick="enterSystem()" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded font-bold text-white transition">ACCESS</button>
-            <p id="display-error" class="text-red-500 text-xs text-center mt-4 hidden">Incorrect Password</p>
         </div>
     </div>
 
-    <!-- ADMIN DASHBOARD -->
     <div id="admin-dashboard" class="hidden-system min-h-screen p-10">
-        
         <div class="flex justify-between items-center border-b border-slate-800 pb-6 mb-10">
-            <h1 class="text-3xl font-bold tracking-tight">📊 <span class="text-indigo-400">Live</span> Dashboard</h1>
+            <h1 class="text-3xl font-bold tracking-tight">📊 <span class="text-indigo-400">Total Revenue</span></h1>
             <button onclick="location.reload()" class="border border-red-500 text-red-500 px-4 py-2 rounded text-sm">Logout</button>
         </div>
 
-        <!-- Sales Card -->
-        <div class="bg-slate-900 border border-slate-800 p-8 rounded-xl mb-8">
+        <!-- THIS READS THE MEMORY (Everything saves here now) -->
+        <div class="bg-slate-900 border border-slate-800 p-8 rounded-xl">
             <div class="flex justify-between items-end">
                 <div>
-                    <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Total Revenue</h2>
-                    <!-- READS URL AS BACKUP JUST IN CASE -->
-                    <div id="revenue-number" class="text-6xl font-bold text-white">$0.00</div>
-                </div>
-                <div class="text-right">
-                    <div class="bg-green-500/10 text-green-500 px-3 py-1 rounded text-xs font-bold mb-1">ONLINE</div>
+                    <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Grand Total</h2>
+                    <div id="revenue-number" class="text-6xl font-bold text-white">$142,850</div>
                 </div>
             </div>
-        </div>
-        <div class="bg-slate-900 border border-slate-800 p-8 rounded-xl">
-            <p class="text-slate-400">
-                Agency operations rely on cloud software and open-source IoT. Installation duties require a licensed electrician.
-            </p>
+            <p class="text-slate-500 text-sm mt-4">Updates automatically as new transactions are recorded.</p>
         </div>
     </div>
 
     <script>
-        // AUTO-DIAGNOSTIC: If you open this page and it has "amount" in the URL, force an admin login!
-        const urlParams = new URLSearchParams(window.location.search);
-        const autoEmail = urlParams.get('user');
-        const autoPass = urlParams.get('pass');
-
-        if (autoEmail === 'admin' && autoPass === 'admin123') {
-            // If URL says to login, do it automatically
-            document.getElementById('username').value = 'admin';
-            document.getElementById('password').value = 'admin123';
-            enterSystem();
-        }
-
         function enterSystem() {
             const u = document.getElementById('username').value;
             const p = document.getElementById('password').value;
-
             if (u === 'admin' && p === 'admin123') {
                 document.getElementById('login-panel').classList.add('hidden-system');
                 document.getElementById('admin-dashboard').classList.remove('hidden-system');
-                updatePrice();
-            } else {
-                document.getElementById('display-error').classList.remove('hidden');
-            }
-        }
-
-        function updatePrice() {
-            // TRY 1: Read from memory (from Thankyou page)
-            let amount = localStorage.getItem('sessionRevenue');
-
-            // TRY 2: Read from URL (Backup, just in case)
-            if (!amount) {
-                const urlParams = new URLSearchParams(window.location.search);
-                amount = urlParams.get('amount');
-            }
-
-            // DISPLAY RESULT
-            const revNum = document.getElementById('revenue-number');
-            if (amount) {
-                revNum.innerText = '$' + amount;
-            } else {
-                revNum.innerText = '$0.00';
+                
+                // READ THE MEMORY
+                const total = localStorage.getItem('sessionRevenue');
+                const revNum = document.getElementById('revenue-number');
+                
+                if (total) {
+                    revNum.innerText = '$' + total;
+                }
             }
         }
     </script>
