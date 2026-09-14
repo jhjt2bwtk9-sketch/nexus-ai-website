@@ -27,7 +27,7 @@
         <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mt-6 mb-8 leading-tight">
             Intelligent Automation for <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Homes & Enterprise</span>
         </h1>
-        <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed text-slate-300">
+        <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
             Whether you want to automate complex business workflows or turn your property into a zero-touch smart home, NexusAI builds custom solutions tailored to you.
         </p>
         <div class="flex flex-col sm:flex-row justify-center gap-4">
@@ -78,24 +78,29 @@
         </div>
     </section>
 
-    <!-- Contact Form Section -->
+    <!-- Updated Contact Form with Redirect Logic -->
     <section id="contact" class="max-w-3xl mx-auto px-6 py-20 bg-slate-800/30 rounded-3xl border border-slate-800 mb-24">
         <div class="text-center mb-8">
             <h2 class="text-3xl font-bold">Ready to Automate?</h2>
-            <p class="text-slate-400 mt-2">Fill out the form below. Please note this is a demo project.</p>
+            <p class="text-slate-400 mt-2">Fill out the form below.</p>
         </div>
 
-        <form action="https://formspree.io/f/xbgjvkwr" method="POST" class="space-y-4">
+        <!-- Updated Form: Handles the redirection -->
+        <form action="https://formspree.io/f/xbgjvkwr" method="POST" onsubmit="redirectToThankYou(event)" class="space-y-4">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input type="text" name="name" placeholder="Full Name" required class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-white">
                 <input type="email" name="email" placeholder="Email Address" required class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-white">
             </div>
+            
+            <!-- Extra Select Option for Price Tracking -->
             <select name="type" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-300">
-                <option value="" disabled selected>Select Property Type...</option>
-                <option value="Residential">Residential Smart Home</option>
-                <option value="Commercial">Business Enterprise</option>
+                <option value="Basic" data-price="500">Basic Setup ($500)</option>
+                <option value="Full Home" data-price="2500">Complete Home ($2,500)</option>
+                <option value="Enterprise" data-price="12000">Enterprise ($12,000)</option>
             </select>
+
             <textarea name="message" placeholder="What do you want to automate?" rows="4" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-white"></textarea>
+            
             <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 rounded-lg transition">Submit Request</button>
         </form>
     </section>
@@ -103,10 +108,22 @@
     <!-- Footer -->
     <footer class="border-t border-slate-800 py-8 text-center text-slate-500 text-sm">
         <div class="mb-4">
-             <!-- Clean link without password hint -->
              <a href="details.html" class="text-slate-600 hover:text-indigo-500 underline transition text-xs">🔐 Admin Access</a>
         </div>
         <p>© 2026 NexusAI Automation. School Project Demonstration.</p>
     </footer>
+
+    <!-- SCRIPT FOR THE BUTTON -->
+    <script>
+        function redirectToThankYou(e) {
+            // 1. Find what they selected
+            const select = document.querySelector('select[name="type"]');
+            const selectedOption = select.options[select.selectedIndex];
+            const price = selectedOption.getAttribute('data-price');
+            
+            // 2. Redirect to thankyou.html with the price
+            window.location.href = `thankyou.html?amount=${price}`;
+        }
+    </script>
 </body>
 </html>
