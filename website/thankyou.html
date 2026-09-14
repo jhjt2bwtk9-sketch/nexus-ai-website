@@ -2,33 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Processing Payment...</title>
-    <meta http-equiv="refresh" content="0;url=details.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process Transaction</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { background-color: #0f172a; color: white; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; }
-        .loader { border: 4px solid rgba(255,255,255,0.1); width: 36px; height: 36px; border-radius: 50%; border-left-color: #6366f1; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        body { background-color: #020617; color: white; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; }
     </style>
 </head>
 <body>
 
-    <div style="text-align: center">
-        <div class="loader" style="margin: 0 auto 20px;"></div>
-        <h2>Processing Transaction...</h2>
-        <p>Redirecting to Admin Dashboard</p>
+    <div class="text-center">
+        <div class="text-4xl mb-4">💸</div>
+        <h2 class="text-2xl font-bold text-white mb-2">Processing Transaction...</h2>
+        <p class="text-slate-400" id="debug-text">Awaiting data...</p>
 
-        <!-- THE MAGIC CODE: Saves the money to your browser storage -->
         <script>
-            // Get the amount from the URL
+            // 1. Get the money from the address bar
             const urlParams = new URLSearchParams(window.location.search);
             const amount = urlParams.get('amount');
+            const display = document.getElementById('debug-text');
 
+            // 2. Save it to the computer's memory
             if (amount) {
-                // Save it to your browser so the Admin page can see it
                 localStorage.setItem('sessionRevenue', amount);
                 localStorage.setItem('lastTransactionTime', 'Just now');
+                
+                display.innerHTML = `Processing Amount: <strong>$${amount}</strong>`;
+                
+                // 3. Wait 2 seconds, then send user to Admin Dashboard
+                // This guarantees the info is saved before they move on
+                setTimeout(() => {
+                    window.location.href = "details.html";
+                }, 2000);
             } else {
-                localStorage.setItem('sessionRevenue', '0');
+                display.innerHTML = "Error: No amount found in URL."
             }
         </script>
     </div>
