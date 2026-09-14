@@ -114,16 +114,20 @@
     </footer>
 
     <!-- SCRIPT FOR THE BUTTON -->
-    <script>
-        function redirectToThankYou(e) {
-            // 1. Find what they selected
-            const select = document.querySelector('select[name="type"]');
-            const selectedOption = select.options[select.selectedIndex];
-            const price = selectedOption.getAttribute('data-price');
-            
-            // 2. Redirect to thankyou.html with the price
+  <script>
+    function redirectToThankYou(e) {
+        e.preventDefault(); // Stop reload
+        
+        const select = document.querySelector('select[name="type"]');
+        // If option picked, get price
+        if (select && select.selectedIndex !== -1) {
+            const price = select.options[select.selectedIndex].getAttribute('data-price');
+            // Simple clean URL
             window.location.href = `thankyou.html?amount=${price}`;
+        } else {
+            alert("Please select a package!");
         }
-    </script>
+    }
+</script>
 </body>
 </html>
