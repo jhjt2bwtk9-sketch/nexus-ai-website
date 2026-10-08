@@ -1,133 +1,405 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NexusAI - Next-Gen Automation for Homes & Businesses</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="NexusAI – school project demo of a smart home and business automation company.">
+<title>NexusAI – Automation for homes and businesses</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🤖</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:'DM Sans',system-ui,sans-serif;background:#0a0f1e;color:#e6eaf5}
+.display{font-family:'Bricolage Grotesque','DM Sans',system-ui,sans-serif;letter-spacing:-.025em}
+.panel{background:#111a30;border:1px solid #25304d;border-radius:1rem}
+.btn{background:#1b2744;border:1px solid #2d3b61;border-radius:.6rem;transition:.2s}
+.btn:hover{background:#26356000;border-color:#6366f1;background:#232f52}
+.room{background:#0d1426;border:1px solid #25304d;border-radius:.9rem;transition:.25s;text-align:left}
+.room.on{background:#2a2410;border-color:#fbbf24;box-shadow:0 0 30px -8px #fbbf24aa}
+.size{color:#8b97b8;transition:.2s}.size[aria-pressed=true]{background:#6366f1;color:#fff}
+.tab[aria-selected=true]{background:#6366f1;color:#fff;border-color:#6366f1}
+.glow{background:radial-gradient(520px circle at var(--mx,75%) var(--my,20%),#4f46e540,transparent 70%)}
+details>summary{cursor:pointer;list-style:none}details>summary::-webkit-details-marker{display:none}
+details[open] .plus{transform:rotate(45deg)}.plus{transition:.2s}
+:focus-visible{outline:2px solid #818cf8;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+:root{--base:2.1s}.seen{--base:.1s}
+.rise{animation:rise .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:calc(var(--base) + var(--d,0s))}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+#intro{position:fixed;inset:0;z-index:100;background:#0a0f1e;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.1rem;animation:introOut .7s ease 1.9s forwards}
+#intro .wm{animation:pop .8s ease both}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.96)}to{opacity:1;transform:none}}
+#intro .bar{width:180px;height:3px;background:#1b2744;border-radius:9px;overflow:hidden}
+#intro .bar i{display:block;height:100%;background:linear-gradient(90deg,#6366f1,#22d3ee);transform-origin:left;transform:scaleX(0);animation:fill 1.6s ease .2s forwards}
+@keyframes fill{to{transform:scaleX(1)}}
+@keyframes introOut{to{opacity:0;visibility:hidden}}
+.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}.js .reveal.in{opacity:1;transform:none}
+.seen #intro{display:none}
+@media (prefers-reduced-motion:reduce){#intro{display:none}.rise{animation:none}.js .reveal{opacity:1;transform:none}}
+.step{background:#0d1426;border:1px solid #25304d;border-radius:.8rem;padding:.8rem;opacity:.45;transition:.4s}
+.step.on{opacity:1;border-color:#6366f1;box-shadow:0 0 24px -8px #6366f1}
+.step.done{opacity:1;border-color:#34d399}
+</style>
+<script>document.documentElement.classList.add('js');try{if(sessionStorage.getItem('nxSeen'))document.documentElement.classList.add('seen')}catch(e){}</script>
 </head>
-<body class="bg-slate-900 text-slate-100 font-sans antialiased">
+<body class="antialiased">
+<div id="intro" aria-hidden="true"><div class="wm display text-5xl font-extrabold">Nexus<span class="text-indigo-400">.AI</span></div><div class="bar"><i></i></div><div id="introTxt" class="text-xs text-slate-400">Starting up…</div></div>
 
-    <!-- Navigation -->
-    <nav class="flex items-center justify-between px-8 py-6 max-w-7xl mx-auto border-b border-slate-800">
-        <div class="text-2xl font-bold tracking-wider text-indigo-400">NEXUS<span class="text-white">.AI</span></div>
-        <div class="space-x-8 text-slate-400 text-sm font-medium hidden md:block">
-            <a href="#solutions" class="hover:text-white transition">Solutions</a>
-            <a href="#pricing" class="hover:text-white transition">Pricing</a>
-            <a href="#contact" class="hover:text-white transition">Contact Us</a>
-        </div>
-        <a href="#contact" class="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-5 py-2.5 rounded-lg text-sm transition">Get Started</a>
-    </nav>
+<div class="bg-amber-400 text-slate-900 text-center text-sm font-medium py-2 px-4">School project demo. Not a real business, and no payment is taken.</div>
 
-    <!-- Hero Section -->
-    <section class="max-w-5xl mx-auto text-center px-6 py-16">
-        <div class="bg-yellow-500/10 border border-yellow-500 text-yellow-400 p-4 rounded-lg text-sm font-bold mb-6 animate-pulse">
-            ⚠️ NOT A REAL BUSINESS. SCHOOL PROJECT DEMO ONLY.
-        </div>
-        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight mt-6 mb-8 leading-tight">
-            Intelligent Automation for <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">Homes & Enterprise</span>
-        </h1>
-        <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
-            Whether you want to automate complex business workflows or turn your property into a zero-touch smart home, NexusAI builds custom solutions tailored to you.
-        </p>
-        <div class="flex flex-col sm:flex-row justify-center gap-4">
-            <a href="#contact" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-8 py-4 rounded-lg shadow-lg shadow-indigo-500/20 transition">Get a Free Consultation</a>
-            <a href="#pricing" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold px-8 py-4 rounded-lg border border-slate-700 transition">View Pricing</a>
-        </div>
-    </section>
+<nav class="flex items-center justify-between px-6 md:px-8 py-5 max-w-7xl mx-auto">
+  <a href="#" class="display text-2xl font-extrabold">Nexus<span class="text-indigo-400">.AI</span></a>
+  <div class="flex gap-5 md:gap-8 text-slate-400 text-sm font-medium">
+    <a href="#solutions" class="hover:text-white transition">Solutions</a>
+    <a href="#pricing" class="hover:text-white transition">Pricing</a>
+    <a href="#faq" class="hover:text-white transition">FAQ</a>
+  </div>
+  <a href="#contact" class="hidden sm:block bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-5 py-2.5 rounded-lg text-sm transition">Get started</a>
+</nav>
 
-    <!-- Pricing Section -->
-    <section id="pricing" class="max-w-7xl mx-auto px-6 py-24 border-t border-slate-800">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold">Simple Base Pricing</h2>
-            <p class="text-slate-400 mt-2">Choose a package that fits your automation needs.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-slate-800/50 p-8 rounded-2xl border border-slate-700">
-                <h3 class="text-xl font-bold mb-2">Basic</h3>
-                <div class="mb-6"><span class="text-4xl font-bold text-indigo-400">$500</span> <span class="text-sm text-slate-400">/ Project</span></div>
-                <ul class="text-slate-400 space-y-2 text-sm mb-6">
-                    <li>🏡 Basic Room Control</li>
-                    <li>🤖 1 Smart App Setup</li>
-                    <li>📅 1-Month Support</li>
-                </ul>
-                <a href="#contact" class="block w-full text-center bg-slate-700 hover:bg-slate-600 py-3 rounded-lg font-semibold">Select Basic</a>
-            </div>
-            <div class="bg-slate-800/50 p-8 rounded-2xl border border-indigo-500/50 transform md:-translate-y-4">
-                <h3 class="text-xl font-bold mb-2">Complete Home</h3>
-                <div class="mb-6"><span class="text-4xl font-bold text-cyan-400">$2,500</span> <span class="text-sm text-slate-400">/ Project</span></div>
-                <ul class="text-slate-400 space-y-2 text-sm mb-6">
-                    <li>🏡 Full Smart Control</li>
-                    <li>🗣️ Voice Recognition</li>
-                    <li>🌡️ Climate Integration</li>
-                    <li>📅 6-Month Support</li>
-                </ul>
-                <a href="#contact" class="block w-full text-center bg-indigo-600 hover:bg-indigo-500 py-3 rounded-lg font-semibold">Select Full</a>
-            </div>
-            <div class="bg-slate-800/50 p-8 rounded-2xl border border-slate-700">
-                <h3 class="text-xl font-bold mb-2">Enterprise</h3>
-                <div class="mb-6"><span class="text-4xl font-bold text-white">$12,000</span> <span class="text-sm text-slate-400">/ Project</span></div>
-                <ul class="text-slate-400 space-y-2 text-sm mb-6">
-                    <li>⚙️ Workflow Automation</li>
-                    <li>📊 Data Analytics</li>
-                    <li>🔒 API Integration</li>
-                    <li>📅 Lifetime Support</li>
-                </ul>
-                <a href="#contact" class="block w-full text-center bg-slate-700 hover:bg-slate-600 py-3 rounded-lg font-semibold">Select Enterprise</a>
-            </div>
-        </div>
-    </section>
+<header class="glow relative overflow-hidden"><canvas id="net" class="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true"></canvas>
+<div class="relative z-10 max-w-7xl mx-auto px-6 md:px-8 pt-10 pb-20 grid lg:grid-cols-2 gap-12 items-center">
+  <div>
+    <h1 class="rise display text-5xl md:text-6xl font-extrabold leading-[1.05]" style="--d:0s">Your home and your business, running themselves.</h1>
+    <p class="rise text-slate-400 text-lg mt-6 max-w-xl leading-relaxed" style="--d:.15s">NexusAI sets up smart homes and automates the boring parts of running a company. Try the control panel: it works.</p>
+    <div class="rise flex flex-wrap gap-3 mt-8" style="--d:.3s">
+      <a href="#contact" class="bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-7 py-3.5 rounded-lg transition">Get a free consultation</a>
+      <a href="#pricing" class="btn font-bold px-7 py-3.5">See pricing</a>
+    </div>
+  </div>
 
-    <!-- Updated Contact Form with Redirect Logic -->
-    <section id="contact" class="max-w-3xl mx-auto px-6 py-20 bg-slate-800/30 rounded-3xl border border-slate-800 mb-24">
-        <div class="text-center mb-8">
-            <h2 class="text-3xl font-bold">Ready to Automate?</h2>
-            <p class="text-slate-400 mt-2">Fill out the form below.</p>
-        </div>
+  <div class="rise panel p-5 shadow-2xl" style="--d:.2s" aria-label="Interactive smart home demo">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="font-bold">Control panel</h2><span class="text-xs text-emerald-400">● Demo online</span>
+    </div>
+    <div id="rooms" class="grid grid-cols-3 gap-3 mb-4"></div>
+    <div class="flex items-center justify-between rounded-xl border border-[#25304d] px-4 py-3 mb-4">
+      <div><div class="text-xs text-slate-400">Heating target</div><div id="temp" class="display text-3xl font-extrabold text-cyan-300">21.0°</div></div>
+      <div class="flex gap-2">
+        <button id="tDown" class="btn w-11 h-11 text-xl" aria-label="Lower temperature">−</button>
+        <button id="tUp" class="btn w-11 h-11 text-xl" aria-label="Raise temperature">+</button>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-3 mb-4">
+      <button data-scene="home" class="btn py-2.5 text-sm font-bold">🏠 I'm home</button>
+      <button data-scene="night" class="btn py-2.5 text-sm font-bold">🌙 Good night</button>
+    </div>
+    <form id="cmdForm" class="flex gap-2 mb-2">
+      <input id="cmd" aria-label="Command" placeholder='Type a command, e.g. "kitchen on"' class="flex-1 min-w-0 bg-[#0d1426] border border-[#25304d] rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-400">
+      <button class="bg-indigo-500 hover:bg-indigo-400 font-bold px-4 rounded-lg text-sm transition">Send</button>
+    </form>
+    <div class="flex flex-wrap gap-2 mb-4">
+      <button data-cmd="bedroom off" class="chip text-xs border border-[#2d3b61] rounded-full px-3 py-1 text-slate-400 hover:text-white hover:border-indigo-400">bedroom off</button>
+      <button data-cmd="warm it up" class="chip text-xs border border-[#2d3b61] rounded-full px-3 py-1 text-slate-400 hover:text-white hover:border-indigo-400">warm it up</button>
+      <button data-cmd="good night" class="chip text-xs border border-[#2d3b61] rounded-full px-3 py-1 text-slate-400 hover:text-white hover:border-indigo-400">good night</button>
+    </div>
+    <ul id="log" class="text-xs text-slate-400 space-y-1 min-h-[4.5rem]" aria-live="polite"></ul>
+  </div>
+</div>
+</header>
 
-        <!-- Updated Form: Handles the redirection -->
-        <form action="https://formspree.io/f/xbgjvkwr" method="POST" onsubmit="redirectToThankYou(event)" class="space-y-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <input type="text" name="name" placeholder="Full Name" required class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-white">
-                <input type="email" name="email" placeholder="Email Address" required class="bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-white">
-            </div>
-            
-            <!-- Extra Select Option for Price Tracking -->
-            <select name="type" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-slate-300">
-                <option value="Basic" data-price="500">Basic Setup ($500)</option>
-                <option value="Full Home" data-price="2500">Complete Home ($2,500)</option>
-                <option value="Enterprise" data-price="12000">Enterprise ($12,000)</option>
-            </select>
+<section id="solutions" class="max-w-5xl mx-auto px-6 md:px-8 py-20 scroll-mt-4">
+  <h2 class="display text-3xl md:text-4xl font-extrabold">What we automate</h2>
+  <div class="flex flex-wrap gap-2 mt-6" role="tablist">
+    <button class="tab btn px-4 py-2 text-sm font-bold" role="tab" data-tab="home" aria-selected="true">🏡 Smart home</button>
+    <button class="tab btn px-4 py-2 text-sm font-bold" role="tab" data-tab="business" aria-selected="false">⚙️ Business workflows</button>
+    <button class="tab btn px-4 py-2 text-sm font-bold" role="tab" data-tab="data" aria-selected="false">📊 Data and APIs</button>
+  </div>
+  <div class="panel p-8 mt-4 grid md:grid-cols-2 gap-8" role="tabpanel" aria-live="polite">
+    <div><h3 id="tabTitle" class="display text-2xl font-bold"></h3><p id="tabText" class="text-slate-400 mt-3 leading-relaxed"></p></div>
+    <ul id="tabList" class="space-y-3 text-sm"></ul>
+  </div>
+</section>
 
-            <textarea name="message" placeholder="What do you want to automate?" rows="4" required class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-500 text-white"></textarea>
-            
-            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 rounded-lg transition">Submit Request</button>
-        </form>
-    </section>
+<section id="demo2" class="max-w-5xl mx-auto px-6 md:px-8 pb-16 scroll-mt-4">
+  <div class="panel p-8">
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+      <div><h2 class="display text-2xl md:text-3xl font-extrabold">Watch an invoice handle itself</h2><p class="text-slate-400 text-sm mt-1">A typical business workflow, simulated.</p></div>
+      <button id="runWf" class="bg-indigo-500 hover:bg-indigo-400 font-bold px-6 py-3 rounded-lg transition">▶ Run workflow</button>
+    </div>
+    <ol id="wf" class="grid sm:grid-cols-5 gap-3 text-sm"></ol>
+    <div class="mt-6 h-2 bg-[#0d1426] rounded-full overflow-hidden"><div id="wfBar" class="h-full w-0 bg-gradient-to-r from-indigo-500 to-cyan-400 transition-all duration-500"></div></div>
+    <p id="wfOut" class="text-sm text-slate-400 mt-3 min-h-[1.25rem]">Press run to start.</p>
+  </div>
+  <div class="panel p-8 mt-6">
+    <h2 class="display text-2xl md:text-3xl font-extrabold">How much could automation save you?</h2>
+    <div class="grid md:grid-cols-2 gap-8 mt-6 items-center">
+      <div class="space-y-6">
+        <label class="block text-sm">Hours per week spent on repetitive tasks: <b id="hVal" class="text-white">10</b>
+          <input id="hours" type="range" min="1" max="60" value="10" class="w-full accent-indigo-500 mt-2"></label>
+        <label class="block text-sm">Cost of one hour ($): <b id="rVal" class="text-white">25</b>
+          <input id="rate" type="range" min="10" max="150" value="25" step="5" class="w-full accent-indigo-500 mt-2"></label>
+      </div>
+      <div class="text-center">
+        <div class="text-xs text-slate-400">Illustrative yearly saving if 80% is automated</div>
+        <div id="save" class="display text-5xl font-extrabold text-emerald-400 my-2">$0</div>
+        <div id="payback" class="text-sm text-slate-400"></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <!-- Footer -->
-    <footer class="border-t border-slate-800 py-8 text-center text-slate-500 text-sm">
-        <div class="mb-4">
-             <a href="details.html" class="text-slate-600 hover:text-indigo-500 underline transition text-xs">🔐 Admin Access</a>
-        </div>
-        <p>© 2026 NexusAI Automation. School Project Demonstration.</p>
-    </footer>
+<section id="pricing" class="max-w-7xl mx-auto px-6 md:px-8 py-20 scroll-mt-4">
+  <h2 class="display text-3xl md:text-4xl font-extrabold">Pricing per project</h2>
+  <p class="text-slate-400 mt-2">Pick a package, then tell us what you need.</p>
+  <div class="grid md:grid-cols-3 gap-6 mt-10 items-start">
+    <div class="panel p-8">
+      <h3 class="font-bold text-xl">Basic</h3>
+      <div class="my-5"><span class="display text-4xl font-extrabold">$500</span></div>
+      <ul class="text-slate-400 space-y-2 text-sm mb-6"><li>🏡 Basic room control</li><li>🤖 1 smart app setup</li><li>📅 1-month support</li></ul>
+      <a href="#contact" data-plan="Basic" class="btn block text-center py-3 font-bold">Choose Basic</a>
+    </div>
+    <div class="panel p-8 !border-indigo-400 md:-mt-4 shadow-[0_0_40px_-12px_#6366f1]">
+      <h3 class="font-bold text-xl">Complete Home <span class="ml-1 text-xs bg-indigo-500 px-2 py-0.5 rounded-full align-middle">Most popular</span></h3>
+      <div class="my-5"><span class="display text-4xl font-extrabold text-cyan-300">$2,500</span></div>
+      <ul class="text-slate-400 space-y-2 text-sm mb-6"><li>🏡 Full smart control</li><li>🗣️ Voice recognition</li><li>🌡️ Climate integration</li><li>📅 6-month support</li></ul>
+      <a href="#contact" data-plan="Full Home" class="block text-center py-3 font-bold rounded-lg bg-indigo-500 hover:bg-indigo-400 transition">Choose Complete Home</a>
+    </div>
+    <div class="panel p-8">
+      <h3 class="font-bold text-xl">Enterprise</h3>
+      <div class="flex gap-1 mt-3 p-1 bg-[#0d1426] rounded-lg" aria-label="Company size">
+        <button type="button" class="size flex-1 text-xs font-bold py-1.5 rounded-md" data-size="Small" aria-pressed="true">Small</button>
+        <button type="button" class="size flex-1 text-xs font-bold py-1.5 rounded-md" data-size="Medium" aria-pressed="false">Medium tech</button>
+        <button type="button" class="size flex-1 text-xs font-bold py-1.5 rounded-md" data-size="Large" aria-pressed="false">Large</button>
+      </div>
+      <div class="mt-5"><span id="entPrice" class="display text-4xl font-extrabold">$12,000</span></div>
+      <p id="entFor" class="text-xs text-slate-400 mt-1 mb-5">For small businesses</p>
+      <ul id="entList" class="text-slate-400 space-y-2 text-sm mb-6"><li>⚙️ Workflow automation</li><li>📊 Data analytics</li><li>🔒 API integration</li><li>📅 Lifetime support</li></ul>
+      <a href="#contact" id="entBtn" data-plan="Enterprise Small" class="btn block text-center py-3 font-bold">Choose Enterprise</a>
+    </div>
+  </div>
+</section>
 
-    <!-- SCRIPT FOR THE BUTTON -->
-  <script>
-    function redirectToThankYou(e) {
-        e.preventDefault(); // Stop reload
-        
-        const select = document.querySelector('select[name="type"]');
-        // If option picked, get price
-        if (select && select.selectedIndex !== -1) {
-            const price = select.options[select.selectedIndex].getAttribute('data-price');
-            // Simple clean URL
-            window.location.href = `thankyou.html?amount=${price}`;
-        } else {
-            alert("Please select a package!");
-        }
+<section id="faq" class="max-w-3xl mx-auto px-6 md:px-8 py-20 scroll-mt-4">
+  <h2 class="display text-3xl md:text-4xl font-extrabold mb-8">Questions</h2>
+  <div class="space-y-3">
+    <details class="panel px-6 py-4"><summary class="flex justify-between font-bold">Is NexusAI a real company?<span class="plus text-indigo-400 text-xl">+</span></summary><p class="text-slate-400 text-sm mt-3 leading-relaxed">No. It is a school project, so nothing here can be bought and no payment is taken.</p></details>
+    <details class="panel px-6 py-4"><summary class="flex justify-between font-bold">Who does the electrical work?<span class="plus text-indigo-400 text-xl">+</span></summary><p class="text-slate-400 text-sm mt-3 leading-relaxed">High-voltage wiring is always done by a licensed electrician. We handle the software and smart devices.</p></details>
+    <details class="panel px-6 py-4"><summary class="flex justify-between font-bold">What happens to the form data?<span class="plus text-indigo-400 text-xl">+</span></summary><p class="text-slate-400 text-sm mt-3 leading-relaxed">Your name, email and message go to a form service so the project owner can read them. Please don't enter private details.</p></details>
+  </div>
+</section>
+
+<section id="contact" class="max-w-3xl mx-auto px-6 md:px-8 pb-24 scroll-mt-4">
+  <div class="panel p-8 md:p-10">
+    <h2 class="display text-3xl font-extrabold">Ready to automate?</h2>
+    <p class="text-slate-400 mt-2 mb-6">This is a demo: no real order is placed.</p>
+    <form id="orderForm" action="https://formspree.io/f/xbgjvkwr" method="POST" class="space-y-4">
+      <div class="grid sm:grid-cols-2 gap-4">
+        <input type="text" name="name" placeholder="Full name" required autocomplete="name" class="bg-[#0d1426] border border-[#25304d] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-400">
+        <input type="email" name="email" placeholder="Email address" required autocomplete="email" class="bg-[#0d1426] border border-[#25304d] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-400">
+      </div>
+      <select name="type" required class="w-full bg-[#0d1426] border border-[#25304d] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-400 text-slate-300">
+        <option value="Basic" data-price="500">Basic setup ($500)</option>
+        <option value="Full Home" data-price="2500" selected>Complete Home ($2,500)</option>
+        <option value="Enterprise Small" data-price="12000">Enterprise, small business ($12,000)</option>
+        <option value="Enterprise Medium" data-price="200000">Enterprise, medium tech ($200,000)</option>
+        <option value="Enterprise Large" data-price="1000000">Enterprise, large company ($1,000,000)</option>
+      </select>
+      <textarea name="message" placeholder="What do you want to automate?" rows="4" required class="w-full bg-[#0d1426] border border-[#25304d] rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-indigo-400"></textarea>
+      <button id="submitBtn" type="submit" class="w-full bg-indigo-500 hover:bg-indigo-400 disabled:opacity-60 font-bold py-3.5 rounded-lg transition">Send request</button>
+      <p id="formError" class="hidden text-sm text-red-400 text-center">Could not send the form. Check your connection and try again.</p>
+    </form>
+  </div>
+</section>
+
+<footer class="border-t border-[#25304d] py-8 text-center text-slate-500 text-sm">
+  <a href="details.html" class="text-slate-600 hover:text-indigo-400 underline text-xs">🔐 Admin access</a>
+  <p class="mt-3">© 2026 NexusAI Automation. School project demonstration.</p>
+</footer>
+
+<script>
+const API_URL = 'https://nexusorders.f5wp7tjw5b.workers.dev';
+const $ = id => document.getElementById(id);
+
+/* ---------- Interactive control panel ---------- */
+const rooms = [['living','Living room','🛋️'],['kitchen','Kitchen','🍳'],['bedroom','Bedroom','🛏️']];
+const st = { living:false, kitchen:false, bedroom:true, temp:21 };
+const roomBtns = {};
+rooms.forEach(([id,name,icon]) => {
+  const b = document.createElement('button');
+  b.className = 'room p-3';
+  b.innerHTML = `<div class="text-2xl">${icon}</div><div class="text-sm font-bold mt-1">${name}</div><div class="text-xs text-slate-400" data-s></div>`;
+  b.onclick = () => setRoom(id, !st[id]);
+  $('rooms').appendChild(b); roomBtns[id] = b;
+});
+function log(msg) {
+  const li = document.createElement('li');
+  li.textContent = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'}) + '  ' + msg;
+  $('log').prepend(li);
+  while ($('log').children.length > 4) $('log').lastChild.remove();
+}
+function draw() {
+  rooms.forEach(([id]) => {
+    roomBtns[id].classList.toggle('on', st[id]);
+    roomBtns[id].setAttribute('aria-pressed', st[id]);
+    roomBtns[id].querySelector('[data-s]').textContent = st[id] ? 'Light on' : 'Light off';
+  });
+  $('temp').textContent = st.temp.toFixed(1) + '°';
+}
+function setRoom(id, on) { st[id] = on; draw(); log(rooms.find(r => r[0] === id)[1] + ' light ' + (on ? 'on' : 'off')); }
+function setTemp(t) { st.temp = Math.min(26, Math.max(16, t)); draw(); log('Heating set to ' + st.temp.toFixed(1) + '°'); }
+function scene(name) {
+  if (name === 'night') { rooms.forEach(([id]) => st[id] = false); st.temp = 18; log('Scene "Good night": lights off, heating 18.0°'); }
+  else { st.living = st.kitchen = true; st.temp = 22; log('Scene "I\'m home": living room and kitchen on, heating 22.0°'); }
+  draw();
+}
+function run(text) {
+  const c = text.toLowerCase();
+  if (/night|sleep/.test(c)) return scene('night');
+  if (/\bhome\b|arriv/.test(c)) return scene('home');
+  if (/warm|hotter|heat/.test(c)) return setTemp(st.temp + 1);
+  if (/cool|cold/.test(c)) return setTemp(st.temp - 1);
+  const r = rooms.find(r => c.includes(r[0]));
+  if (r) return setRoom(r[0], /\boff\b/.test(c) ? false : /\bon\b/.test(c) ? true : !st[r[0]]);
+  log('Not understood. Try "kitchen on" or "good night".');
+}
+$('tUp').onclick = () => setTemp(st.temp + .5);
+$('tDown').onclick = () => setTemp(st.temp - .5);
+document.querySelectorAll('[data-scene]').forEach(b => b.onclick = () => scene(b.dataset.scene));
+document.querySelectorAll('[data-cmd]').forEach(b => b.onclick = () => run(b.dataset.cmd));
+$('cmdForm').onsubmit = e => { e.preventDefault(); if ($('cmd').value.trim()) run($('cmd').value); $('cmd').value = ''; };
+draw(); log('Panel connected (demo)');
+
+/* ---------- Solutions tabs ---------- */
+const tabs = {
+  home: ['Smart home', 'Control lights, heating and sensors from one app. Everything runs on open-source Home Assistant, so you are never locked in.', ['Room-by-room lighting and climate', 'Voice control', 'Scenes like "Good night" in one tap']],
+  business: ['Business workflows', 'Repetitive jobs like invoicing and sorting email are handled automatically with AI and Make.com, so your team can focus on customers.', ['Automatic invoice and email handling', 'AI assistants connected to your tools', 'Alerts when something needs a human']],
+  data: ['Data and APIs', 'Connect your existing tools and see the numbers that matter in one place.', ['API integrations between your systems', 'One dashboard for key figures', 'GDPR-compliant data handling']]
+};
+function showTab(k) {
+  document.querySelectorAll('.tab').forEach(t => t.setAttribute('aria-selected', t.dataset.tab === k));
+  $('tabTitle').textContent = tabs[k][0]; $('tabText').textContent = tabs[k][1];
+  $('tabList').replaceChildren(...tabs[k][2].map(t => { const li = document.createElement('li'); li.className = 'flex gap-3'; li.innerHTML = '<span class="text-indigo-400">✓</span>'; li.append(t); return li; }));
+}
+document.querySelectorAll('.tab').forEach(t => t.onclick = () => showTab(t.dataset.tab));
+showTab('home');
+
+/* ---------- Enterprise size toggle ---------- */
+const ent = {
+  Small: ['$12,000', 'For small businesses', ['⚙️ Workflow automation', '📊 Data analytics', '🔒 API integration', '📅 Lifetime support']],
+  Medium: ['$200,000', 'For medium tech companies', ['⚙️ Custom automation platform', '📊 Real-time analytics dashboards', '🔒 Secure API and cloud integration', '👥 Dedicated engineering team', '📅 Priority support']],
+  Large: ['$1,000,000', 'For large companies', ['🏢 Company-wide automation rollout', '📊 Enterprise data platform', '🔒 Security review and compliance', '👥 Dedicated on-site team', '📅 24/7 support with SLA']]
+};
+function showSize(k) {
+  document.querySelectorAll('.size').forEach(b => b.setAttribute('aria-pressed', b.dataset.size === k));
+  $('entPrice').textContent = ent[k][0]; $('entFor').textContent = ent[k][1];
+  $('entList').replaceChildren(...ent[k][2].map(t => { const li = document.createElement('li'); li.textContent = t; return li; }));
+  $('entBtn').dataset.plan = 'Enterprise ' + k;
+}
+document.querySelectorAll('.size').forEach(b => b.onclick = () => showSize(b.dataset.size));
+
+/* ---------- Order form ---------- */
+const form = $('orderForm'), btn = $('submitBtn'), err = $('formError');
+document.querySelectorAll('[data-plan]').forEach(a => a.addEventListener('click', () => { form.elements.type.value = a.dataset.plan; }));
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  err.classList.add('hidden'); btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
+    if (!res.ok) throw new Error('send failed');
+    const opt = form.elements.type.selectedOptions[0];
+    let order = { id: 'NEX-' + Date.now().toString(36).toUpperCase(), plan: opt.value, price: Number(opt.dataset.price), ts: Date.now() };
+    if (API_URL) {
+      try {
+        const r = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: opt.value }) });
+        if (r.ok) order = await r.json();
+      } catch (_) { /* server down: visitor still gets confirmation */ }
     }
+    try {
+      const list = JSON.parse(localStorage.getItem('nexusOrders') || '[]');
+      list.push(order); localStorage.setItem('nexusOrders', JSON.stringify(list));
+    } catch (_) {}
+    location.href = 'thankyou.html?order=' + order.id;
+  } catch (_) {
+    err.classList.remove('hidden'); btn.disabled = false; btn.textContent = 'Send request';
+  }
+});
+
+/* ---------- Network background ---------- */
+(() => {
+  const c = $('net'), x = c.getContext('2d'); let w, h, pts = [], m = { x: -999, y: -999 };
+  const size = () => {
+    const r = c.parentElement.getBoundingClientRect(), d = devicePixelRatio || 1;
+    w = r.width; h = r.height; c.width = w * d; c.height = h * d; x.setTransform(d, 0, 0, d, 0, 0);
+    pts = Array.from({ length: Math.round(w * h / 22000) }, () => ({ x: Math.random() * w, y: Math.random() * h, vx: (Math.random() - .5) * .3, vy: (Math.random() - .5) * .3 }));
+  };
+  size(); addEventListener('resize', size);
+  c.parentElement.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); m.x = e.clientX - r.left; m.y = e.clientY - r.top; });
+  c.parentElement.addEventListener('pointerleave', () => { m.x = m.y = -999; });
+  const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  (function tick() {
+    x.clearRect(0, 0, w, h);
+    pts.forEach(p => { if (!still) { p.x += p.vx; p.y += p.vy; } if (p.x < 0 || p.x > w) p.vx *= -1; if (p.y < 0 || p.y > h) p.vy *= -1; });
+    const all = [...pts, m];
+    for (let i = 0; i < all.length; i++) for (let j = i + 1; j < all.length; j++) {
+      const a = all[i], b = all[j], near = a === m || b === m, d = Math.hypot(a.x - b.x, a.y - b.y), max = near ? 170 : 120;
+      if (d < max) { x.strokeStyle = `rgba(129,140,248,${(1 - d / max) * (near ? .7 : .35)})`; x.beginPath(); x.moveTo(a.x, a.y); x.lineTo(b.x, b.y); x.stroke(); }
+    }
+    x.fillStyle = 'rgba(165,180,252,.7)';
+    pts.forEach(p => { x.beginPath(); x.arc(p.x, p.y, 1.8, 0, 7); x.fill(); });
+    if (!still) requestAnimationFrame(tick);
+  })();
+})();
+
+/* ---------- Workflow simulator ---------- */
+[['📧', 'Email arrives', 'Invoice from a supplier'], ['🤖', 'AI reads it', 'Amount, due date, supplier'], ['🔎', 'Checks the data', 'Matches the purchase order'], ['📒', 'Posts to accounting', 'Entry created'], ['✅', 'Done', 'No one typed anything']].forEach(([i, t, d]) => {
+  const li = document.createElement('li'); li.className = 'step';
+  li.innerHTML = `<div class="text-xl">${i}</div><div class="font-bold mt-1">${t}</div><div class="text-xs text-slate-400 mt-1">${d}</div>`;
+  $('wf').appendChild(li);
+});
+let wfBusy = false;
+$('runWf').onclick = async () => {
+  if (wfBusy) return; wfBusy = true;
+  const li = [...$('wf').children]; li.forEach(e => e.className = 'step');
+  $('wfBar').style.width = '0'; $('wfOut').textContent = 'Running…';
+  for (let i = 0; i < li.length; i++) {
+    li[i].classList.add('on'); $('wfBar').style.width = ((i + 1) / li.length * 100) + '%';
+    await new Promise(r => setTimeout(r, 750));
+    li[i].classList.replace('on', 'done');
+  }
+  $('wfOut').textContent = 'Done in seconds. By hand this usually takes a few minutes of typing.'; wfBusy = false;
+};
+
+/* ---------- Savings calculator ---------- */
+const usd = n => '$' + Math.round(n).toLocaleString('en-US');
+let shown = 0, raf;
+function calc() {
+  const h = +$('hours').value, r = +$('rate').value;
+  $('hVal').textContent = h; $('rVal').textContent = r;
+  const yr = h * 52 * r * .8, from = shown, t0 = performance.now();
+  cancelAnimationFrame(raf);
+  const f = t => { const k = Math.min(1, (t - t0) / 450); shown = from + (yr - from) * k; $('save').textContent = usd(shown); if (k < 1) raf = requestAnimationFrame(f); };
+  raf = requestAnimationFrame(f);
+  const mo = 12000 / (yr / 12);
+  $('payback').textContent = 'Enterprise Small ($12,000) would pay for itself in ' + (mo < 1 ? 'under a month' : mo >= 24 ? (mo / 12).toFixed(1) + ' years' : Math.round(mo) + ' months') + '.';
+}
+$('hours').oninput = $('rate').oninput = calc; calc();
+
+/* ---------- Intro text, boot sequence, scroll reveal, hero glow ---------- */
+const first = !document.documentElement.classList.contains('seen');
+if (first) ['Connecting devices…', 'Checking lights…', 'Calibrating climate…', 'Ready'].forEach((t, i) => setTimeout(() => { $('introTxt').textContent = t; }, i * 450));
+try { setTimeout(() => sessionStorage.setItem('nxSeen', '1'), 2600); } catch (_) {}
+const T = first ? 2400 : 500;
+setTimeout(() => log('Scanning devices…'), T);
+setTimeout(() => setRoom('living', true), T + 600);
+setTimeout(() => setRoom('kitchen', true), T + 1000);
+setTimeout(() => log('All devices online'), T + 1500);
+
+const revealEls = document.querySelectorAll('#solutions > *, #demo2 .panel, #pricing .panel, #faq details, #contact .panel');
+revealEls.forEach((el, i) => { el.classList.add('reveal'); el.style.transitionDelay = (i % 3) * 90 + 'ms'; });
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { threshold: .12 });
+  revealEls.forEach(el => io.observe(el));
+} else revealEls.forEach(el => el.classList.add('in'));
+
+const gl = document.querySelector('.glow');
+gl.addEventListener('pointermove', e => {
+  const r = gl.getBoundingClientRect();
+  gl.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+  gl.style.setProperty('--my', (e.clientY - r.top) + 'px');
+});
 </script>
 </body>
 </html>
