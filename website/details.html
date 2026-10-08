@@ -3,120 +3,180 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
   <title>NexusAI – Admin Console</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-      .hidden { display: none !important; }
-  </style>
 </head>
 <body class="bg-slate-950 text-slate-200 font-sans">
 
-  <!-- ---------- LOGIN PANEL ---------- -->
+  <!-- Login -->
   <section id="login-section" class="min-h-screen flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 p-10 rounded-2xl max-w-sm w-full shadow-2xl">
+    <form id="loginForm" class="bg-slate-900 border border-slate-800 p-10 rounded-2xl max-w-sm w-full shadow-2xl">
       <h1 class="text-2xl font-bold text-center mb-6 text-indigo-400">NEXUS ADMIN</h1>
-
-      <input type="text" id="u" placeholder="Admin ID" class="w-full p-3 mb-4 bg-slate-800 border border-slate-700 rounded text-white focus:border-indigo-500" required>
-      <input type="password" id="p" placeholder="Secret Key" class="w-full p-3 mb-6 bg-slate-800 border border-slate-700 rounded text-white focus:border-indigo-500" required>
-
-      <button id="loginBtn" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded font-bold transition">ACCESS</button>
-      <p id="loginError" class="text-xs text-red-500 mt-4 hidden text-center">Invalid ID / Secret</p>
-    </div>
+      <input type="text" id="u" placeholder="Admin ID" autocomplete="username" class="w-full p-3 mb-4 bg-slate-800 border border-slate-700 rounded text-white focus:outline-none focus:border-indigo-500" required>
+      <input type="password" id="p" placeholder="Secret key" autocomplete="current-password" class="w-full p-3 mb-6 bg-slate-800 border border-slate-700 rounded text-white focus:outline-none focus:border-indigo-500" required>
+      <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 py-3 rounded font-bold transition">Log in</button>
+      <p id="loginError" class="text-xs text-red-500 mt-4 hidden text-center">Wrong ID or secret key.</p>
+      <a href="index.html" class="block text-center text-xs text-slate-500 hover:text-slate-300 mt-6 underline">Back to website</a>
+    </form>
   </section>
 
-  <!-- ---------- ADMIN DASHBOARD (Hidden At First) ---------- -->
-  <section id="admin-section" class="hidden min-h-screen p-10 bg-slate-950 text-slate-200">
-    <!-- Header -->
+  <!-- Dashboard -->
+  <section id="admin-section" class="hidden min-h-screen p-6 md:p-10">
     <header class="flex justify-between items-center mb-8 border-b border-slate-800 pb-4">
-      <h2 class="text-3xl font-bold text-indigo-400">📊 Admin Console</h2>
-      <button id="logoutBtn" class="text-sm font-medium text-red-500 hover:text-red-400">LOGOUT</button>
+      <h2 class="text-2xl md:text-3xl font-bold text-indigo-400">📊 Admin Console</h2>
+      <button id="logoutBtn" class="text-sm font-medium text-red-500 hover:text-red-400">Log out</button>
     </header>
 
-    <!-- Stats Card -->
     <section class="bg-slate-900 border border-slate-800 p-8 rounded-xl mb-8">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between gap-4">
         <div>
-          <h3 class="text-sm font-bold uppercase tracking-wide text-slate-400 mb-2">Running Total</h3>
-          <div id="rev" class="text-4xl font-bold text-white">$0.00</div>
-          <p id="revStatus" class="text-xs text-slate-500 mt-2">No transactions recorded.</p>
+          <h3 class="text-sm font-bold text-slate-400 mb-2">Total from demo orders</h3>
+          <div id="rev" class="text-4xl font-bold text-slate-500">$0.00</div>
+          <p id="revStatus" class="text-xs text-slate-500 mt-2">No orders yet.</p>
         </div>
-        <div class="text-right">
-          <div class="bg-green-500/10 text-green-500 px-3 py-1 rounded text-xs font-bold mb-1">ONLINE</div>
-        </div>
+        <div class="bg-green-500/10 text-green-500 px-3 py-1 rounded text-xs font-bold">ONLINE</div>
       </div>
     </section>
 
-    <!-- Business Overview -->
-    <section class="bg-slate-900 border border-slate-800 p-8 rounded-xl">
-      <h3 class="text-xl font-bold mb-6 flex items-center gap-2"><span class="text-indigo-400">📜</span> Operational Requirements</h3>
-      <p class="text-sm text-slate-400 space-y-2 leading-relaxed">
-        • Cloud software (OpenAI, Make.com) & open‑source IoT (Home Assistant).<br>
-        • VPS (Hetzner/DigitalOcean).<br>
-        • Licensed electrician for high‑voltage wiring.<br>
-        • Liability insurance & GDPR‑compliant privacy policy.
-      </p>
+    <section class="bg-slate-900 border border-slate-800 p-8 rounded-xl mb-8">
+      <h3 class="text-xl font-bold mb-4">🧾 Orders</h3>
+      <p id="emptyMsg" class="text-sm text-slate-500">Submit the form on the main page and the order appears here.</p>
+      <div class="overflow-x-auto">
+        <table id="ordersTable" class="hidden w-full text-sm text-left">
+          <thead class="text-slate-400 border-b border-slate-800">
+            <tr><th class="py-2 pr-4">Order</th><th class="py-2 pr-4">Package</th><th class="py-2 pr-4">Price</th><th class="py-2">Time</th></tr>
+          </thead>
+          <tbody id="ordersBody"></tbody>
+        </table>
+      </div>
+      <p id="storeNote" class="text-xs text-slate-600 mt-4"></p>
     </section>
 
-    <!-- Reset Button (Visible ONLY after login) -->
+    <section class="bg-slate-900 border border-slate-800 p-8 rounded-xl">
+      <h3 class="text-xl font-bold mb-6"><span class="text-indigo-400">📜</span> Operational requirements</h3>
+      <ul class="text-sm text-slate-400 space-y-2 leading-relaxed list-disc pl-5">
+        <li>Cloud software (OpenAI, Make.com) &amp; open-source IoT (Home Assistant).</li>
+        <li>VPS (Hetzner/DigitalOcean).</li>
+        <li>Licensed electrician for high-voltage wiring.</li>
+        <li>Liability insurance &amp; GDPR-compliant privacy policy.</li>
+      </ul>
+    </section>
+
     <footer class="mt-8 text-center">
-      <button id="resetBtn" class="text-xs text-slate-500 hover:text-red-500 underline transition">Reset Session Data</button>
+      <button id="resetBtn" class="text-xs text-slate-500 hover:text-red-500 underline transition">Reset order data</button>
     </footer>
   </section>
 
   <script>
-    // Utility to read, write, and clear localStorage totals
-    const getTotal = () => parseInt(localStorage.getItem('sessionRevenue')) || 0;
-    const setTotal = (val) => localStorage.setItem('sessionRevenue', val);
-    const clearTotal = () => localStorage.removeItem('sessionRevenue');
+    const API_URL = 'https://nexusorders.f5wp7tjw5b.workers.dev';
+    const $ = (id) => document.getElementById(id);
+    const money = (n, d = 2) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
+    let pw = sessionStorage.getItem('nexusPw') || '';
 
-    // UI Update
-    const updateUI = () => {
-      const tot = getTotal();
-      const revEl = document.getElementById('rev');
-      const status = document.getElementById('revStatus');
-      if (tot > 0) {
-        revEl.textContent = `$${tot}`;
-        revEl.classList.remove('text-slate-500', 'text-white');
-        revEl.classList.add('text-green-400');
-        status.textContent = `Last transaction • ${new Date().toLocaleTimeString()}`;
+    // Server mode (API_URL set): orders from all visitors. Otherwise: this browser only.
+    async function getOrders() {
+      if (!API_URL) {
+        try { return JSON.parse(localStorage.getItem('nexusOrders') || '[]'); } catch (_) { return []; }
+      }
+      const r = await fetch(API_URL, { headers: { Authorization: 'Bearer ' + pw } });
+      if (r.status === 401) throw new Error('auth');
+      if (!r.ok) throw new Error('server');
+      return (await r.json()).sort((a, b) => a.ts - b.ts);
+    }
+
+    async function render() {
+      let orders;
+      try { orders = await getOrders(); }
+      catch (e) {
+        if (e.message === 'auth') { logout(); return; }
+        $('revStatus').textContent = 'Could not load orders from the server.';
+        return;
+      }
+      const total = orders.reduce((s, o) => s + (Number(o.price) || 0), 0);
+      const rev = $('rev');
+      rev.textContent = money(total);
+      rev.className = 'text-4xl font-bold ' + (total > 0 ? 'text-green-400' : 'text-slate-500');
+
+      const body = $('ordersBody');
+      body.replaceChildren();
+      $('emptyMsg').classList.toggle('hidden', orders.length > 0);
+      $('ordersTable').classList.toggle('hidden', orders.length === 0);
+      $('storeNote').textContent = API_URL
+        ? 'Orders from all visitors, loaded from your server. Updates every 30 seconds.'
+        : 'Orders are stored in this browser only. Messages from all visitors arrive in your Formspree dashboard.';
+
+      if (orders.length) {
+        const last = orders[orders.length - 1];
+        $('revStatus').textContent = `${orders.length} order${orders.length > 1 ? 's' : ''} · last on ${new Date(last.ts).toLocaleString()}`;
       } else {
-        revEl.textContent = `$0.00`;
-        revEl.classList.remove('text-green-400', 'text-slate-500');
-        revEl.classList.add('text-slate-500');
-        status.textContent = 'No transactions recorded.';
+        $('revStatus').textContent = 'No orders yet.';
       }
-    };
 
-    // Login handler
-    document.getElementById('loginBtn').addEventListener('click', () => {
-      const u = document.getElementById('u').value.trim();
-      const p = document.getElementById('p').value.trim();
-      if (u === 'admin' && p === 'admin123') {
-        document.getElementById('login-section').classList.add('hidden');
-        document.getElementById('admin-section').classList.remove('hidden');
-        updateUI();
+      [...orders].reverse().forEach(o => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-slate-800/60';
+        [o.id, o.plan, money(o.price, 0), new Date(o.ts).toLocaleString()].forEach(v => {
+          const td = document.createElement('td');
+          td.className = 'py-2 pr-4';
+          td.textContent = v;
+          tr.appendChild(td);
+        });
+        body.appendChild(tr);
+      });
+    }
+
+    function show(loggedIn) {
+      $('login-section').classList.toggle('hidden', loggedIn);
+      $('admin-section').classList.toggle('hidden', !loggedIn);
+      if (loggedIn) render();
+    }
+
+    function logout() {
+      sessionStorage.removeItem('nexusAdmin');
+      sessionStorage.removeItem('nexusPw');
+      pw = '';
+      $('p').value = '';
+      show(false);
+    }
+
+    // Login. Server mode: the server checks the password (it is not in this file).
+    // Local mode (demo only): the password is visible in this file, so it is not real security.
+    $('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const err = $('loginError');
+      const fail = (msg = 'Wrong ID or secret key.') => { err.textContent = msg; err.classList.remove('hidden'); };
+      err.classList.add('hidden');
+      const u = $('u').value.trim(), p = $('p').value.trim();
+      if (u !== 'admin') return fail();
+      if (API_URL) {
+        pw = p;
+        try { await getOrders(); }
+        catch (x) { pw = ''; return fail(x.message === 'auth' ? undefined : 'Server not reachable. Try again.'); }
+        sessionStorage.setItem('nexusPw', pw);
+      } else if (p !== 'admin123') {
+        return fail();
+      }
+      sessionStorage.setItem('nexusAdmin', '1');
+      show(true);
+    });
+
+    $('logoutBtn').addEventListener('click', logout);
+
+    $('resetBtn').addEventListener('click', async () => {
+      if (!confirm('Delete ALL saved orders? This cannot be undone.')) return;
+      if (API_URL) {
+        try { await fetch(API_URL, { method: 'DELETE', headers: { Authorization: 'Bearer ' + pw } }); } catch (_) {}
       } else {
-        document.getElementById('loginError').classList.remove('hidden');
+        localStorage.removeItem('nexusOrders');
       }
+      render();
     });
 
-    // Logout handler
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      document.getElementById('admin-section').classList.add('hidden');
-      document.getElementById('login-section').classList.remove('hidden');
-    });
-
-    // Reset button
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      if (confirm('Reset ALL transaction data? This cannot be undone.')) {
-        clearTotal();
-        updateUI();
-        alert('Session data cleared to $0.00.');
-      }
-    });
-
-    // Run once on load – in case user lands directly on admin
-    updateUI();
+    // Stay logged in after refresh; keep numbers fresh
+    show(sessionStorage.getItem('nexusAdmin') === '1');
+    window.addEventListener('storage', () => { if (!API_URL && !$('admin-section').classList.contains('hidden')) render(); });
+    setInterval(() => { if (API_URL && !$('admin-section').classList.contains('hidden')) render(); }, 30000);
   </script>
 </body>
 </html>
