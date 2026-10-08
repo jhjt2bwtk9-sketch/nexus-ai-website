@@ -2,46 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Order Confirmed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <title>Request received – NexusAI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background-color: #020617; color: white; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-    </style>
 </head>
-<body>
+<body class="bg-slate-950 text-white font-sans min-h-screen flex items-center justify-center p-6">
 
-    <div class="text-center">
-        <div class="text-6xl mb-4 text-green-500">✅</div>
-        <h2 class="text-3xl font-bold text-slate-200 mb-2">Order Confirmed</h2>
-        <p class="text-slate-400 mb-8">Your request has been queued.</p>
-        
-        <div class="bg-slate-900 border border-slate-700 p-8 rounded-xl max-w-sm mx-auto mb-10">
-            <p class="text-sm text-slate-400 uppercase tracking-widest">Invoice ID: #NEX-9921</p>
+    <main class="text-center w-full max-w-sm">
+        <div id="icon" class="text-6xl mb-4">✅</div>
+        <h1 id="title" class="text-3xl font-bold text-slate-200 mb-2">Request received</h1>
+        <p id="subtitle" class="text-slate-400 mb-8">Your request has been queued.</p>
+
+        <div id="receipt" class="bg-slate-900 border border-slate-700 p-8 rounded-xl mb-6">
+            <p class="text-sm text-slate-400">Order <span id="orderId">-</span></p>
             <hr class="border-slate-800 my-6">
-            <p class="text-2xl font-bold text-white" id="display-price">$0.00</p>
-            <p class="text-xs text-slate-500 mt-2">Transaction Authorized</p>
+            <p id="plan" class="text-slate-300 mb-1">-</p>
+            <p id="price" class="text-2xl font-bold text-white">$0</p>
+            <p id="date" class="text-xs text-slate-500 mt-2"></p>
         </div>
 
-        <button onclick="location.href='index.html'" class="bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3 rounded-lg font-bold transition">
-            Return to Website
-        </button>
+        <p class="text-xs text-yellow-400 mb-8">School project demo: no payment was taken and no real order was placed.</p>
 
-        <script>
-            // 1. Get new money from URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const amount = parseInt(urlParams.get('amount')) || 0;
+        <a href="index.html" class="inline-block bg-indigo-600 hover:bg-indigo-500 text-white px-8 py-3 rounded-lg font-bold transition">Back to website</a>
+    </main>
 
-            // 2. READ OLD TOTAL + ADD NEW MONEY
-            let currentTotal = parseInt(localStorage.getItem('sessionRevenue')) || 0;
-            let newTotal = currentTotal + amount;
+    <script>
+        // Look up the order saved by the form page. Nothing is added here,
+        // so refreshing this page can never change the admin total.
+        const id = new URLSearchParams(location.search).get('order');
+        let order = null;
+        try {
+            order = JSON.parse(localStorage.getItem('nexusOrders') || '[]').find(o => o.id === id);
+        } catch (_) {}
 
-            // 3. SAVE NEW TOTAL
-            localStorage.setItem('sessionRevenue', newTotal);
-
-            // 4. SHOW ONLY THE CURRENT ORDER PRICE ON RECEIPT
-            document.getElementById('display-price').innerText = '$' + amount;
-        </script>
-    </div>
-
+        if (order) {
+            document.getElementById('orderId').textContent = '#' + order.id;
+            document.getElementById('plan').textContent = order.plan + ' package';
+            document.getElementById('price').textContent =
+                new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(order.price);
+            document.getElementById('date').textContent = new Date(order.ts).toLocaleString();
+        } else {
+            document.getElementById('icon').textContent = '🔍';
+            document.getElementById('title').textContent = 'No order found';
+            document.getElementById('subtitle').textContent = 'Submit the form on the main page to see your request here.';
+            document.getElementById('receipt').classList.add('hidden');
+        }
+    </script>
 </body>
 </html>
