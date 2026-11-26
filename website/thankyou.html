@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex">
-    <title>Request received – NexusAI</title>
+    <title>Request received – NAIA</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @media print {
@@ -17,12 +17,12 @@
 </head>
 <body class="bg-slate-950 text-white font-sans min-h-screen flex items-center justify-center p-6">
 
-    <main class="text-center w-full max-w-md">
+    <main class="text-center w-full max-w-xl">
         <div id="icon" class="text-6xl mb-4">✅</div>
         <h1 id="title" class="text-3xl font-bold text-slate-200 mb-2">Request received</h1>
         <p id="subtitle" class="text-slate-400 mb-8">Your request has been queued.</p>
 
-        <div id="receipt" class="bg-slate-900 border border-slate-700 p-8 rounded-xl mb-4">
+        <div id="receipt" class="bg-slate-900 border border-slate-700 p-8 rounded-xl mb-4 max-w-sm mx-auto">
             <p class="text-sm text-slate-400">Order <span id="orderId">-</span></p>
             <hr class="border-slate-800 my-6">
             <p id="plan" class="text-slate-300 mb-1">-</p>
@@ -30,31 +30,54 @@
             <p id="date" class="text-xs text-slate-500 mt-2"></p>
         </div>
 
-        <button id="invBtn" class="w-full mb-4 border border-slate-600 hover:border-indigo-400 py-3 rounded-lg font-bold transition">🧾 Download invoice (PDF)</button>
+        <div id="invTools" class="max-w-sm mx-auto mb-4">
+            <div class="flex gap-2 justify-center mb-3 text-xs">
+                <button id="langEn" class="px-3 py-1 rounded-full border border-slate-600">English</button>
+                <button id="langCs" class="px-3 py-1 rounded-full border border-slate-600">Čeština</button>
+            </div>
+            <button id="invBtn" class="w-full border border-slate-600 hover:border-indigo-400 py-3 rounded-lg font-bold transition">🧾 Download invoice (PDF)</button>
+        </div>
 
-        <section id="invoice" class="hidden bg-white text-slate-900 rounded-xl p-8 text-left mb-6">
+        <section id="invoice" class="hidden bg-white text-slate-900 rounded-xl p-8 text-left mb-6 text-sm">
             <div class="flex justify-between items-start gap-4">
                 <div>
-                    <div class="text-xl font-extrabold">NexusAI Automation</div>
-                    <div class="text-xs text-slate-500">School project demo</div>
+                    <div class="text-2xl font-extrabold" data-t="inv"></div>
+                    <div class="text-slate-500"><span data-t="no"></span> <span id="iNo"></span></div>
                 </div>
-                <div class="text-right">
-                    <div class="font-bold">DEMO INVOICE</div>
-                    <div class="text-xs text-slate-500">No. <span id="iNo"></span></div>
-                    <div id="iDate" class="text-xs text-slate-500"></div>
+                <div class="border border-amber-500 text-amber-700 rounded px-2 py-0.5 text-xs font-bold" data-t="demo"></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-6 mt-6">
+                <div>
+                    <div class="text-xs text-slate-500" data-t="sup"></div>
+                    <div id="sName" class="font-bold"></div>
+                    <div id="sAddr"></div>
+                    <div><span data-t="ico"></span>: <span id="sIco"></span></div>
+                    <div id="sDic"></div>
+                    <div id="sReg" class="text-xs text-slate-500 mt-1"></div>
+                </div>
+                <div>
+                    <div class="text-xs text-slate-500" data-t="cus"></div>
+                    <div id="iName" class="font-bold"></div>
+                    <div id="iMail"></div>
                 </div>
             </div>
-            <div class="mt-6 text-sm">
-                <div class="text-xs text-slate-500">Billed to</div>
-                <div id="iName" class="font-bold"></div>
-                <div id="iMail"></div>
+
+            <div class="grid grid-cols-2 gap-x-6 gap-y-1 mt-6 text-xs">
+                <div><span class="text-slate-500" data-t="issued"></span>: <span id="iDate"></span></div>
+                <div><span class="text-slate-500" data-t="due"></span>: <span id="iDue"></span></div>
+                <div><span class="text-slate-500" data-t="pay"></span>: <span data-t="transfer"></span></div>
+                <div id="bankRow"><span class="text-slate-500" data-t="bank"></span>: <span id="sBank"></span></div>
+                <div><span class="text-slate-500" data-t="vs"></span>: <span id="iVs"></span></div>
             </div>
-            <table class="w-full text-sm mt-6">
-                <thead><tr class="border-b text-left text-slate-500"><th class="py-2">Description</th><th class="py-2 text-right">Amount</th></tr></thead>
-                <tbody><tr class="border-b"><td id="iItem" class="py-3"></td><td id="iAmt" class="py-3 text-right"></td></tr></tbody>
-                <tfoot><tr><td class="pt-3 font-bold">Total (not charged)</td><td id="iTot" class="pt-3 text-right font-bold"></td></tr></tfoot>
+
+            <table class="w-full mt-6">
+                <thead><tr class="border-b text-left text-slate-500 text-xs"><th class="py-2" data-t="desc"></th><th class="py-2 text-center" data-t="qty"></th><th class="py-2 text-right" data-t="price"></th></tr></thead>
+                <tbody><tr class="border-b"><td id="iItem" class="py-3"></td><td class="py-3 text-center">1</td><td id="iAmt" class="py-3 text-right"></td></tr></tbody>
+                <tfoot><tr><td colspan="2" class="pt-3 font-bold" data-t="total"></td><td id="iTot" class="pt-3 text-right font-bold"></td></tr></tfoot>
             </table>
-            <p class="mt-6 text-xs text-slate-500">This is a demo document created for a school project. It is not a real invoice, no payment is due and nothing was charged.</p>
+
+            <p class="mt-6 text-xs text-slate-500" data-t="note"></p>
         </section>
 
         <p class="text-xs text-yellow-400 mb-8">School project demo: no payment was taken and no real order was placed.</p>
@@ -63,6 +86,23 @@
     </main>
 
     <script>
+        // ====== ÚDAJE CVIČNÉ FIRMY: uprav jen tohle ======
+        const COMPANY = {
+            name: 'NAIA',
+            address: 'Štěpánská 33, Praha 1',
+            ico: '10101001',
+            dic: '',                              // prázdné = neplátce DPH
+            register: 'Cvičná firma (školní projekt)',
+            bank: '',                             // číslo účtu, např. '123456789/0100'; prázdné = nezobrazí se
+            dueDays: 14
+        };
+        // ===================================================
+
+        const L = {
+            en: { inv: 'Invoice', no: 'No.', demo: 'DEMO · practice company', sup: 'Supplier', cus: 'Customer', ico: 'Company ID', issued: 'Issue date', due: 'Due date', pay: 'Payment method', transfer: 'Bank transfer', bank: 'Bank account', vs: 'Variable symbol', desc: 'Description', qty: 'Qty', price: 'Price', total: 'Total due', pkg: 'Package', novat: 'Not a VAT payer.', cust: 'Customer', note: 'Practice company: fictional document created for a school project. Not a real invoice, nothing is due.' },
+            cs: { inv: 'Faktura', no: 'č.', demo: 'DEMO · cvičná firma', sup: 'Dodavatel', cus: 'Odběratel', ico: 'IČO', issued: 'Datum vystavení', due: 'Datum splatnosti', pay: 'Způsob úhrady', transfer: 'bankovní převod', bank: 'Číslo účtu', vs: 'Variabilní symbol', desc: 'Popis', qty: 'Množství', price: 'Cena', total: 'Celkem k úhradě', pkg: 'Balíček', novat: 'Nejsem plátce DPH.', cust: 'Zákazník', note: 'Cvičná firma: fiktivní doklad vytvořený pro školní projekt. Nejedná se o skutečnou fakturu, nic není k úhradě.' }
+        };
+
         const $ = (i) => document.getElementById(i);
         // Look up the order saved by the form page. Nothing is added here,
         // so refreshing this page can never change the admin total.
@@ -79,24 +119,42 @@
             $('price').textContent = usd;
             $('date').textContent = new Date(order.ts).toLocaleString();
 
-            // Invoice is filled in automatically from the order
-            $('iNo').textContent = order.id;
-            $('iDate').textContent = new Date(order.ts).toLocaleDateString('en-GB');
-            $('iName').textContent = order.name || 'Customer';
-            $('iMail').textContent = order.email || '';
-            $('iItem').textContent = order.plan + ' package';
-            $('iAmt').textContent = usd;
-            $('iTot').textContent = usd;
+            let lang = order.lang === 'cs' ? 'cs' : 'en';
+            const render = () => {
+                const t = L[lang], loc = lang === 'cs' ? 'cs-CZ' : 'en-GB';
+                document.querySelectorAll('[data-t]').forEach(el => { el.textContent = t[el.dataset.t]; });
+                $('iNo').textContent = order.id;
+                $('iDate').textContent = new Date(order.ts).toLocaleDateString(loc);
+                $('iDue').textContent = new Date(order.ts + COMPANY.dueDays * 86400000).toLocaleDateString(loc);
+                $('iVs').textContent = String(order.ts).slice(-10);
+                $('sName').textContent = COMPANY.name;
+                $('sAddr').textContent = COMPANY.address;
+                $('sIco').textContent = COMPANY.ico;
+                $('sDic').textContent = COMPANY.dic ? 'DIČ: ' + COMPANY.dic : t.novat;
+                $('sReg').textContent = COMPANY.register;
+                $('sBank').textContent = COMPANY.bank;
+                $('bankRow').classList.toggle('hidden', !COMPANY.bank);
+                $('iName').textContent = order.name || t.cust;
+                $('iMail').textContent = order.email || '';
+                $('iItem').textContent = t.pkg + ' ' + order.plan;
+                $('iAmt').textContent = usd;
+                $('iTot').textContent = usd;
+                $('langEn').classList.toggle('bg-indigo-600', lang === 'en');
+                $('langCs').classList.toggle('bg-indigo-600', lang === 'cs');
+            };
+            $('langEn').onclick = () => { lang = 'en'; render(); };
+            $('langCs').onclick = () => { lang = 'cs'; render(); };
+            render();
             $('invBtn').onclick = () => {
                 $('invoice').classList.remove('hidden');
-                setTimeout(() => window.print(), 150); // choose "Save as PDF" in the print window
+                setTimeout(() => window.print(), 150); // v okně tisku zvol "Uložit jako PDF"
             };
         } else {
             $('icon').textContent = '🔍';
             $('title').textContent = 'No order found';
             $('subtitle').textContent = 'Submit the form on the main page to see your request here.';
             $('receipt').classList.add('hidden');
-            $('invBtn').classList.add('hidden');
+            $('invTools').classList.add('hidden');
         }
     </script>
 </body>
