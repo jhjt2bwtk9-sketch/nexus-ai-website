@@ -300,11 +300,11 @@ form.addEventListener('submit', async (e) => {
     const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { Accept: 'application/json' } });
     if (!res.ok) throw new Error('send failed');
     const opt = form.elements.type.selectedOptions[0];
-    let order = { id: 'NEX-' + Date.now().toString(36).toUpperCase(), plan: opt.value, price: Number(opt.dataset.price), ts: Date.now() };
+    let order = { id: 'NEX-' + Date.now().toString(36).toUpperCase(), plan: opt.value, price: Number(opt.dataset.price), ts: Date.now(), name: form.elements.name.value.trim(), email: form.elements.email.value.trim() };
     if (API_URL) {
       try {
         const r = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: opt.value }) });
-        if (r.ok) order = await r.json();
+        if (r.ok) order = { ...order, ...(await r.json()) };
       } catch (_) { /* server down: visitor still gets confirmation */ }
     }
     try {
